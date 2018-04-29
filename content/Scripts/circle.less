@@ -1,0 +1,102 @@
+﻿.circle {
+    position: fixed;
+    top: 90rem;
+    right: 0;
+    width: 0;
+    z-index: 10000;
+    padding-right: 9rem;
+    padding-top: 4.5rem;
+    padding-bottom: 4.5rem;
+
+    &.moveToTop {
+        z-index: 10000;
+    }
+
+    .ring {
+        background: url("./circlebg.png") no-repeat center center;
+        background-size: contain;
+        opacity: 0;
+        border-radius: 4%;
+        transform-origin: 50% 50%;
+        transform: scale(0.1);
+    }
+
+    .center {
+        background: url("./point.gif") no-repeat center center;
+        background-size: cover;
+        opacity: 0.8;
+        bottom: 0;
+        color: white;
+        height: 9rem;
+        left: 0;
+        line-height: 9rem;
+        margin: auto;
+        position: absolute;
+        right: 0;
+        top: 0;
+        text-align: center;
+        width: 9rem;
+        text-decoration: none;
+        /*box-shadow:0 0 20px 10px #000;*/
+    }
+
+    .menuItem {
+        border-radius: 50%;
+        color: #eeeeee;
+        // display: none;
+        height: 9rem;
+        margin-left: -4.5rem;
+        margin-top: -4.5rem;
+        position: absolute;
+        text-align: center;
+        width: 9rem;
+        text-decoration: none;
+
+        img {
+            width: 6.3rem;
+            margin-bottom: 0.45rem;
+        }
+
+        .fa-5x {
+            font-size: 2em;
+        }
+
+        em {
+            font-style: normal;
+            font-size: 1.8rem;
+            line-height: 1.8rem;
+            white-space: nowrap;
+        }
+
+        &.show {
+            display: block;
+        }
+        /*&#btnSearch{
+            em{
+                font-size:@grid * 0.2;
+            }
+        }*/
+    }
+
+    &.open {
+        height: 45rem;
+        width: 45rem;
+        top: 45rem;
+        right: 33rem;
+        padding-top: 0;
+        padding-right: 0;
+        padding-bottom: 0;
+
+        .ring {
+            height: 45rem;
+            width: 45rem;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .center {
+            border-color: #aaaaaa;
+            background-image: url("./point.svg");
+        }
+    }
+}
