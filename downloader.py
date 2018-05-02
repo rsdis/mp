@@ -19,13 +19,14 @@ def update_qr_code():
     device_info = get_device_info()
     # QR version
     device_info_version = int(re.findall(
-        r'\b\d.*\d\b', device_info['wechat_qrcode_zip_url']))
-
-    cached_ver = int(util.get_cached_version('QR'))
+        r'\b\d.*\d\b', device_info['wechat_qrcode_zip_url'])[0])
+    cached_ver = -1
+    if util.get_cached_version('QR') is not None :
+        cached_ver = int(util.get_cached_version('QR'))
     # download to update
     if device_info_version > cached_ver:
         util.download_extract_target(
-            device_info['wechat_qrcode_zip_url'], '%s/working/%s/QrCodeResources' % (config.const_client_root), True)
+            device_info['wechat_qrcode_zip_url'], '%s/content/QrCodeResources' % (config.const_client_root()), True)
         util.set_cached_version('QR', device_info_version)
         print(device_info)
 
@@ -47,10 +48,10 @@ def update_product():
     # download image to target folder
     for image in product_info_json['downloadList']:
         util.download_file_to_target(
-            image, '%s/Content/ProductResources/' % (config.const_client_root), True)
+            image, '%s/Content/ProductResources/' % (config.const_client_root()), True)
     # save data file to target folder
     with open('%s/Content/ProductResources/data.js' %
-              (config.const_client_root), 'w+', encoding='utf-8') as data_file:
+              (config.const_client_root()), 'w+', encoding='utf-8') as data_file:
         data_file.write(product_info_text)
 
     # tell server product has been updated
@@ -70,8 +71,8 @@ def update_apps():
             util.download_extract_target(
                 app['ZipPath'], '%s/Content/AppContents/'+app['Name'], True)
     with open('%s/Content/AppContents/app_info.json' %
-              (config.const_client_root), 'w+', encoding='utf-8') as data_file:
+              (config.const_client_root()), 'w+', encoding='utf-8') as data_file:
         data_file.write(json.dumps(apps_info).encode('utf-8'))
 
 
-update_apps()
+update_qr_code()
