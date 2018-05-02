@@ -2,16 +2,22 @@ import threading
 import subprocess
 
 
-class chrome_demo:
+class chrome:
     def __init__(self):
-        self.woker_thread = threading.Thread(target=self.woker_thread)
+        self.woker_thread = threading.Thread(target=self.__chrome_woker)
         self.start_url = None
 
     def __chrome_woker(self):
-        subprocess.call([''])
+        while True:
+            subprocess.call(['chromium-browser','--start-fullscreen','--app='+ self.start_url])
 
-    def url(slef,url):
-        slef.start_url = url
-        t = threading.Thread(target=self.woker_thread)
-        t.
-        if self.woker_thread
+    def start(self,url):
+        self.start_url = url
+        subprocess.call(['pkill','chromium-browse'])
+        self.woker_thread.start()
+
+
+test = chrome()
+
+while True:
+    test.start(input())
