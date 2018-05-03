@@ -9,15 +9,13 @@ class chrome:
 
     def __chrome_woker(self):
         while True:
-            subprocess.call(['chromium-browser','--start-fullscreen','--app='+ self.start_url])
+            subprocess.call(
+                ['chromium-browser', '--start-fullscreen', '--app=' + self.start_url])
 
-    def start(self,url):
+    def start(self, url):
         self.start_url = url
-        subprocess.call(['pkill','chromium-browse'])
+        subprocess.call(['pkill', 'chromium-browse'])
         self.woker_thread.start()
 
 
-test = chrome()
-
-while True:
-    test.start(input())
+chrome_instance = chrome()
