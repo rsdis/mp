@@ -4,7 +4,7 @@ import util
 import re
 import json
 import threading
-
+import subprocess
 
 class content_updater:
     def __init_(self):
@@ -35,7 +35,7 @@ class content_updater:
         # download to update
         if device_info_version > cached_ver:
             util.download_extract_target(
-                device_info['wechat_qrcode_zip_url'], '%s/content/QrCodeResources' % (config.const_client_root()), True)
+                device_info['wechat_qrcode_zip_url'], '%s/Content/QrCodeResources' % (config.const_client_root()), True)
             util.set_cached_version('QR', device_info_version)
             print(device_info)
 
@@ -68,18 +68,29 @@ class content_updater:
         requests.post(product_update_done_url)
 
     def update_apps(self):
+        #get app info url
         app_url_info = '%s/%s/AppContent/getNewestVersionOfZipBy?appKey=%s' % (util.util_remote_service(
             config.const_api_name_webcontent), config.const_api_name_webcontent, config.const_service_id)
+        #get app entitys
         apps_info = requests.get(app_url_info).json()
+        #check app is any version different
         for app in apps_info:
-            local_ver = util.get_cached_version('app_'+app['AppId'])
-            if local_ver is None or local_ver != app['Version']:
+            local_ver = util.get_cached_version('app_'+str(app['appId']))
+            if local_ver is None or local_ver != app['version']:
+                target_dir = '%s/Content/AppContents/'%(config.const_client_root())
+                target_dir = target_dir +str(app['appId'])
+                subprocess.call(['mkdir',target_dir])
                 # perform update
                 util.download_extract_target(
-                    app['ZipPath'], '%s/Content/AppContents/'+app['Name'], True)
+                    app['zipPath'], target_dir, True)
+                util.set_cached_version('app_'+str(app['appId']),str(app['version']))
+        #save data file
         with open('%s/Content/AppContents/app_info.json' %
                   (config.const_client_root()), 'w+', encoding='utf-8') as data_file:
-            data_file.write(json.dumps(apps_info).encode('utf-8'))
+            data_file.write(json.dumps(apps_info))
 
     def start(self):
         self.thread.start()
+
+u = content_updater()
+u.update_apps()

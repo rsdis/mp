@@ -13,8 +13,9 @@ def nginx_config_init():
 
 
 def nginx_reload_start():
-    subprocess.call(['nginx', '-s', 'stop'])
-    subprocess.call('nginx', '-c', '%s/nginx.conf' %
-                    (config.const_client_root()))
+    subprocess.call(['sudo','nginx', '-s', 'stop'])
+    subprocess.call(['sudo','nginx', '-c', '%s/buildin/nginx.conf' %
+                    (config.const_client_root())])
 
-
+nginx_config_init()
+nginx_reload_start()

@@ -1,8 +1,9 @@
-import wifi
 from urllib import request
 import util
 import config
 import chrome
+import subprocess
+
 
 
 class wifi_checker:
@@ -31,13 +32,37 @@ class wifi_checker:
             return True
 
     def scan_wifi_list(self):
-        wifi.Cell.all('wlan0')
+        cmd = subprocess.Popen(['nmcli','device','wifi','list'],stdout=subprocess.PIPE)
+        output = cmd.communicate()[0].decode('utf-8')
+        result = []
+        is_header = True
+        for item in output.split('\n'):
+            if is_header is not True:
+                    subitems = item.split()
+                    if len(subitems) > 5:
+                        if subitems[0] == '*':
+                            wifi_object={
+                                'SSID' : subitems[1],
+                                'wlanSignalQuality' : subitems[7]
+                            }
+                            result.append(wifi_object)
+                        else:
+                            wifi_object={
+                                'SSID' : subitems[0],
+                                'wlanSignalQuality' : subitems[6]
+                            }
+                            result.append(wifi_object)
+            else:
+                is_header=False
+        return result
 
-    def connect_wifi(self, name, password):
-        scheme = wifi.Scheme.for_cell('wlan0', name, '', password)
-        scheme.save()
-        scheme.activate()
+    def connect_wifi(self, ssid, password):
+        cmd = subprocess.Popen(['sudo','nmcli','device','wifi','connect',ssid,'password',password],stdout=subprocess.PIPE)
+        output = cmd.communicate()[0].decode('utf-8')
+        if 'Error' in output:
+            return False
+        else:
+            return True
 
-
-c = wifi_checker()
-f = c.is_network_available()
+checker = wifi_checker()
+checker.connect_wifi('ChinaNet-Cixb-5G','a4g2eqlw')
