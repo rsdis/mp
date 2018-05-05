@@ -3,6 +3,7 @@ import config
 import os
 import subprocess
 import uuid
+import requests
 
 
 def util_remote_service(service_name):

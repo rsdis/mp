@@ -12,7 +12,7 @@ class wifi_checker:
             return
         if self.is_network_available == True:
             return
-        chrome.chrome_instance.start(
+        chrome.instance.start(
             '%s/content/wifi.html' % (config.const_client_web_server_root))
         return
 
@@ -64,5 +64,4 @@ class wifi_checker:
         else:
             return True
 
-checker = wifi_checker()
-checker.connect_wifi('ChinaNet-Cixb-5G','a4g2eqlw')
+instance = wifi_checker()

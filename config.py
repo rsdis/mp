@@ -5,11 +5,12 @@ const_api_name_webcontent = 'rsdis-platform-web-content-management'
 const_api_name_product = 'rsdis-platform-product-metadata'
 const_api_name_resouce = 'rsdis-platform-system'
 const_api_name_wechat = 'rsdis-platform-wechat'
-const_service_id = 'ct001'
-
+const_client_web_server_root = 'http://127.0.0.1:8080'
+const_service_id_name = 'service_id'
+const_service_id = None
 
 def const_client_root():
     return os.getcwd()
 
 
-const_client_web_server_root = 'http://127.0.0.1:8080'
+

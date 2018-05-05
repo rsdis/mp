@@ -18,4 +18,4 @@ class chrome:
         self.woker_thread.start()
 
 
-chrome_instance = chrome()
+instance = chrome()

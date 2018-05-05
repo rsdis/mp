@@ -5,6 +5,7 @@ import re
 import json
 import threading
 import subprocess
+import os
 
 class content_updater:
     def __init_(self):
@@ -14,12 +15,24 @@ class content_updater:
         self.update_qr_code()
         self.update_product()
         self.update_apps()
+    def get_service_id_from_remote(self,session_key):
+        url = '%s/%s/Device/IsActive?machineCode=%s'%(util.util_remote_service(config.const_api_name_resouce),config.const_api_name_resouce,session_key)
+        return requests.get(url).text()
 
     def get_device_info(self):
         device_info_url = '%s/%s/Device/GetDetail?id=%s' % (util.util_remote_service(
             config.const_api_name_resouce), config.const_api_name_resouce, config.const_service_id)
         device_info = requests.get(device_info_url).json()
         return device_info
+
+    def get_default_start():
+        file_path = '%s/Content/AppContents/app_info.json' %(config.const_client_root())
+        if os.path.exists(file_path):
+            with open(file_path, 'r', encoding='utf-8') as data_file:
+                data_file.write(json.dumps(apps_info))
+                #default
+        else:
+            return None
 
     def update_qr_code(self):
         if config.const_service_id is None:
@@ -92,5 +105,4 @@ class content_updater:
     def start(self):
         self.thread.start()
 
-u = content_updater()
-u.update_apps()
+instance = content_updater()

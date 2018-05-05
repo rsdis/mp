@@ -8,7 +8,7 @@ import subprocess
 import config
 import uuid
 import os
-web_app_api = Flask(__name__)
+instance = Flask(__name__)
 # /opt/rsdis/config
 # /opt/rsdis/apps
 # /opt/rsdis/download

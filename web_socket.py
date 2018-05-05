@@ -42,5 +42,4 @@ class web_socket_server:
             self.__outbound[key].put(msg)
 
 
-socket_server = web_socket_server(1234)
-socket_server.start()
+instance = web_socket_server(9999)
