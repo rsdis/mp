@@ -16,7 +16,7 @@ import json
 # init machine code
 machine_code = util.get_cached_version('mc')
 if machine_code is None:
-    util.set_cached_version('mc',str(uuid.uuid1()))
+    util.set_cached_version('mc',str(uuid.uuid1()).replace('-',''))
 machine_code = util.get_cached_version('mc')
 
 # start nginx service
@@ -41,7 +41,7 @@ if config.const_service_id is None:
             time.sleep(1)
 
 #check is service id is empty, ask user to register with mc code
-if config.const_service_id is None:
+if config.const_service_id is not None:
     chrome.instance.start('%s/Content/register.html'%(config.const_client_web_server_root))
     temp_serviceid = downloader.instance.get_service_id_from_remote(machine_code)
     while temp_serviceid is None:
