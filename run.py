@@ -29,8 +29,8 @@ web_api.stater.start()
 # start web socket service
 web_socket.instance.start()
 
-wait_event = threading.Event()
-wait_event.wait()
+time.sleep(2)
+
 
 #check if service id is empty, and wifi is not available, ask to setup wifi
 config.const_service_id = util.get_cached_version(config.const_service_id_name)
@@ -44,7 +44,7 @@ if config.const_service_id is None:
 if config.const_service_id is None:
     chrome.instance.start('%s/Content/register.html'%(config.const_client_web_server_root))
     temp_serviceid = downloader.instance.get_service_id_from_remote(machine_code)
-    while temp_serviceid is None or temp_serviceid == '':
+    while temp_serviceid is None:
         time.sleep(1)
         temp_serviceid = downloader.instance.get_service_id_from_remote(machine_code)
     config.const_service_id = temp_serviceid
@@ -61,9 +61,9 @@ default_app = downloader.instance.get_default_start()
 if default_app is not None:
     msg = {
         'MessageType':0,
-        'MessageData':StartPath['StartPath']
+        'MessageData':default_app['StartPath']
     }
-    web_socket.instance.send(json.dump(msg))
+    web_socket.instance.send(json.dumps(msg))
 
 wait_event = threading.Event()
 wait_event.wait()

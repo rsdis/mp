@@ -16,8 +16,15 @@ class content_updater:
         self.update_product()
         self.update_apps()
     def get_service_id_from_remote(self,session_key):
+        #session_key = '111'
         url = '%s/%s/Device/IsActive?machineCode=%s'%(util.util_remote_service(config.const_api_name_resouce),config.const_api_name_resouce,session_key)
-        return requests.get(url).text()
+        print(url)
+        resp = requests.get(url)
+        if resp.status_code == 200:
+            result = resp.json()
+            return result
+        else:
+            return None
 
     def get_device_info(self):
         device_info_url = '%s/%s/Device/GetDetail?id=%s' % (util.util_remote_service(
@@ -25,11 +32,11 @@ class content_updater:
         device_info = requests.get(device_info_url).json()
         return device_info
 
-    def get_default_start():
+    def get_default_start(self):
         file_path = '%s/Content/AppContents/app_info.json' %(config.const_client_root())
         if os.path.exists(file_path):
             with open(file_path, 'r', encoding='utf-8') as data_file:
-                data_file.write(json.dumps(apps_info))
+                return json.loads(data_file.read(file_path))
                 #default
         else:
             return None

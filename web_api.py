@@ -76,10 +76,11 @@ def SetUpWifi(ssid, pwd):
 
 @instance.route("/api/RegisterCode", methods=['GET'])
 def RegisterCode():
-    url = '%s/%s/CreateDeviceActivationQrcode'%(util.util_remote_service(config.const_api_name_wechat),config.const_api_name_wechat)
+    url = '%s/%s/WechatQrcode/CreateDeviceActivationQrcode'%(util.util_remote_service(config.const_api_name_wechat),config.const_api_name_wechat)
     data = util.get_cached_version('mc')
-    rsp = requests.post(url,json=).text()
-    return
+    rsp = requests.post(url,json=data)
+    result ='data:image/png;base64,'+ rsp.json().replace('"','')
+    return result
 
 def woker():
     instance.run(threaded=True)
