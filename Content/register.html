@@ -98,7 +98,7 @@
 <script src="http://127.0.0.1:8080/Content/Scripts/clientAppHostforSingle.js"></script>
 
 <script>
-    $.get("http://127.0.0.1:8080/RegisterCode", function (data, status) {
+    $.get("http://127.0.0.1:8080/api/RegisterCode", function (data, status) {
         $("#qrcode").prop("src", data);
         $("#loading").hide();
     });

@@ -46,10 +46,4 @@ def download_extract_target(download_uri, target_dir, is_overwirte):
     subprocess.call(['rm', '-f', tmp_file])
 
 def download_file_to_target(download_uri, target_dir, is_overwirte):
-    tmp_file = '%s/buildin/tmp/%s' % (config.const_client_root(),
-                                      str(uuid.uuid1()))
-    if is_overwirte == True:
-        subprocess.call(['rm', '-f', target_dir + '*'])
-    subprocess.call(['curl', '-o', tmp_file, download_uri])
-    subprocess.call(['unzip', '-o', tmp_file, '-d', target_dir])
-    subprocess.call(['rm', '-f', tmp_file])
+    subprocess.call(['cd ' + target_dir + ' ; curl -O ' + download_uri],shell=True)

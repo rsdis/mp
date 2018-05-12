@@ -6,15 +6,21 @@ import json
 import threading
 import subprocess
 import os
+import time
 
 class content_updater:
     def __init__(self):
         self.thread = threading.Thread(target=self.__worker_thread)
 
     def __worker_thread(self):
-        self.update_qr_code()
-        self.update_product()
-        self.update_apps()
+        while True:
+            try:
+                self.update_qr_code()
+                self.update_product()
+                self.update_apps()
+                time.sleep(60*60)
+            except Exception as err:
+                print(err)
     def get_service_id_from_remote(self,session_key):
         url = '%s/%s/Device/IsActive?machineCode=%s'%(util.util_remote_service(config.const_api_name_resouce),config.const_api_name_resouce,session_key)
         print(url)
@@ -70,14 +76,17 @@ class content_updater:
             config.const_api_name_product), config.const_api_name_product)
         print(product_info_url)
         product_info_json = requests.get(product_info_url).json()
-        product_info_text = json.dumps(product_info_json).encode('utf-8')
-        print(product_info_json)
+        product_info_text = json.dumps(product_info_json)
+        #print(product_info_json)
         # download image to target folder
-        for image in product_info_json['downloadList']:
-            util.download_file_to_target(
-                image, '%s/Content/ProductResources/' % (config.const_client_root()), True)
+        for image in product_info_json['DownloadList']:
+            try:
+                util.download_file_to_target(
+                    image, '%s/Content/ProductResources/' % (config.const_client_root()), True)
+            except Exception as err:
+                print(err)
         # save data file to target folder
-        with open('%s/Content/ProductResources/data.js' %
+        with open('%s/Content/ProductResources/data.json' %
                   (config.const_client_root()), 'w+', encoding='utf-8') as data_file:
             data_file.write(product_info_text)
 

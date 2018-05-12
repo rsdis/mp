@@ -29,7 +29,7 @@ web_api.stater.start()
 # start web socket service
 web_socket.instance.start()
 
-time.sleep(2)
+time.sleep(5)
 
 
 #check if service id is empty, and wifi is not available, ask to setup wifi
@@ -41,12 +41,16 @@ if config.const_service_id is None:
             time.sleep(1)
 
 #check is service id is empty, ask user to register with mc code
-if config.const_service_id is not None:
+if config.const_service_id is None:
     chrome.instance.start('%s/Content/register.html'%(config.const_client_web_server_root))
     temp_serviceid = downloader.instance.get_service_id_from_remote(machine_code)
     while temp_serviceid is None:
-        time.sleep(1)
-        temp_serviceid = downloader.instance.get_service_id_from_remote(machine_code)
+        try:
+            time.sleep(1)
+            temp_serviceid = downloader.instance.get_service_id_from_remote(machine_code)
+            temp_serviceid='ct001'
+        except Exception as err:
+            print(err)
     config.const_service_id = temp_serviceid
     util.set_cached_version(config.const_service_id_name,temp_serviceid)
 

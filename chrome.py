@@ -9,8 +9,11 @@ class chrome:
 
     def __chrome_woker(self):
         while True:
-            subprocess.call(
-                ['chromium-browser', '--start-fullscreen', '--app=' + self.start_url])
+            try:
+                subprocess.call(
+                    ['chromium-browser', '--start-fullscreen', '--app=' + self.start_url])
+            except Exception as err:
+                print(err)
 
     def start(self, url):
         self.start_url = url
