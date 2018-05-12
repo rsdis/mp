@@ -82,6 +82,17 @@ def RegisterCode():
     result ='data:image/png;base64,'+ rsp.json().replace('"','')
     return result
 
+@instance.route("/api/post_msg", methods=['POST'])
+def post_msg():
+    form = request.get_json()
+    ty = form['type']
+    if ty == 'shutdown':
+        subprocess.call('sudo','halt')
+    if ty == 'reboot':
+        subprocess.call('sudo','reboot')
+    return None
+
+
 def woker():
     instance.run(threaded=True)
 

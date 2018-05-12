@@ -1,27 +1,21 @@
 ﻿
 console.log("加载JS")
 
-$.connection.hub.url = "http://localhost:9999/signalr";
-var ws = $.connection.clientMessageHub;
-
-ws.client.send = function (message) {
-    console.log(message);
-    OnMessage(message);
+var ws = new WebSocket("ws://127.0.0.1:9999/");
+ws.onmessage = function (event) {
+    console.log(event.data)
+    OnMessage(event.data)
 };
 
-$.connection.hub.start().done(function () {
-    console.log("socket 加载完毕");
-});
-
 function getAllContentInfos(callback) {
-    $.get("http://127.0.0.1:8080/contentinfos", function (data, status) {
+    $.get("http://127.0.0.1:8080/api/contentinfos", function (data, status) {
         console.log(data);
         callback(data);
     });
 }
 
 function getQrByUnique(unique) {
-    var url = "http://127.0.0.1:8080/qrByUnique/" + unique;
+    var url = "http://127.0.0.1:8080/api/qrByUnique/" + unique;
     var result;
     $.ajax({
         url: url,
@@ -37,7 +31,7 @@ function getQrByUnique(unique) {
 }
 
 function getAllQrs(callback) {
-    var url = "http://127.0.0.1:8080/qrInfos";
+    var url = "http://127.0.0.1:8080/api/qrInfos";
     $.ajax({
         url: url,
         cache: false,
@@ -53,7 +47,7 @@ function getAllQrs(callback) {
 
 
 function getAllProductInfos(callback) {
-    $.get("http://127.0.0.1:8080/productInfos", function (data, status) {
+    $.get("http://127.0.0.1:8080/api/productInfos", function (data, status) {
         console.log(data);
         callback(data);
     });
@@ -65,9 +59,9 @@ function getAllProductInfos(callback) {
 //type: switchApp  切换应用
 //{type: "", data: ""}
 function SendMessage(json) {
-    if (ws != undefined) {
-        ws.server.receiveCommand(json);
-    }
+    $.post("http://127.0.0.1:8080/api/post_msg", json,function (result) {
+        console.log(data)
+    });
 }
 
 //MessageHub获取消息（必须要实现的JS方法）

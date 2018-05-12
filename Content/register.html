@@ -1,18 +1,21 @@
 ﻿<!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="utf-8" />
     <title>注册</title>
     <style type="text/css">
         @media screen and (max-device-width: 2160px) {
-            body, html {
+            body,
+            html {
                 font-size: 20px;
             }
         }
 
         @media screen and (max-device-width: 1080px) {
-            body, html {
+            body,
+            html {
                 font-size: 10px;
             }
         }
@@ -29,12 +32,11 @@
             padding: 20px;
             margin: 20px;
         }
-
-  
     </style>
-    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/content/scripts/loading.css">
-     <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/content/scripts/top_menu.css">
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/Content/Scripts/loading.css">
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/Content/Scripts/top_menu.css">
 </head>
+
 <body>
     <div class="loading" id="loading">
         <div class="loading_content">
@@ -55,7 +57,7 @@
     </div>
     <div class="top_menu_container">
         <div class="tmc_logo">
-            <img src="http://127.0.0.1:8080/content/scripts/top_logo.png" />
+            <img src="http://127.0.0.1:8080/Content/Scripts/top_logo.png" />
         </div>
         <div class="tmc_navigation">
             <div class="tmc_menu ">
@@ -77,23 +79,23 @@
                 </div>
                 <img src="" id="qrcode" style="width:400px;height:400px;" />
                 <div style="font-size: 50px;font-weight: bold;margin-top: 50px;">
-                    用户<span style="color:#ffa500">速度</span>，成就每一个向前的你
+                    用户
+                    <span style="color:#ffa500">速度</span>，成就每一个向前的你
                 </div>
             </div>
         </div>
     </div>
-    
+
 
 </body>
 
 </html>
 
-<script src="http://127.0.0.1:8080/content/scripts/jquery.min.js"></script>
-<script src="http://127.0.0.1:8080/content/scripts/jsrender.min.js"></script>
-<script src="http://127.0.0.1:8080/content/scripts/bootstrap.min.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/jquery.min.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/jsrender.min.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/bootstrap.min.js"></script>
 <script src="http://127.0.0.1:8080/Content/Scripts/jquery.signalR-2.2.2.min.js"></script>
-<script src="http://127.0.0.1:9999/signalr/hubs"></script>
-<script src="http://127.0.0.1:8080/content/scripts/clientAppHostforSingle.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/clientAppHostforSingle.js"></script>
 
 <script>
     $.get("http://127.0.0.1:8080/RegisterCode", function (data, status) {

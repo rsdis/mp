@@ -54,9 +54,9 @@
             width: 1000px !important;
         }
     </style>
-    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/content/scripts/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/content/scripts/loading.css">
-    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/content/scripts/top_menu.css">
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/Content/Scripts/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/Content/Scripts/loading.css">
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/Content/Scripts/top_menu.css">
 </head>
 <body>
     <div class="loading" id="loading">
@@ -78,7 +78,7 @@
     </div>
     <div class="top_menu_container">
         <div class="tmc_logo">
-            <img src="http://127.0.0.1:8080/content/scripts/top_logo.png" />
+            <img src="http://127.0.0.1:8080/Content/Scripts/top_logo.png" />
             <a style="float: right;margin:36px;font-size: 20px;" onclick="fetchWifi()">重新检索WIFI</a>
         </div>
         <div class="tmc_navigation">
@@ -210,12 +210,11 @@
 </body>
 
 </html>
-<script src="http://127.0.0.1:8080/content/scripts/jquery.min.js"></script>
-<script src="http://127.0.0.1:8080/content/scripts/jsrender.min.js"></script>
-<script src="http://127.0.0.1:8080/content/scripts/bootstrap.min.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/jquery.min.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/jsrender.min.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/bootstrap.min.js"></script>
 <script src="http://127.0.0.1:8080/Content/Scripts/jquery.signalR-2.2.2.min.js"></script>
-<script src="http://127.0.0.1:9999/signalr/hubs"></script>
-<script src="http://127.0.0.1:8080/content/scripts/clientAppHostforSingle.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/clientAppHostforSingle.js"></script>
 <script id="wifi-tmp" type="text/x-jsrender">
     {{for}}
     <tr>
@@ -242,7 +241,7 @@
     function fetchWifi() {
         $("#loading").show();
         $("#loading_content").html("正在检索本地WIFI...")
-        $.get("http://127.0.0.1:8080/wifiSsids", function (data, status) {
+        $.get("http://127.0.0.1:8080/api/wifiSsids", function (data, status) {
             var myTemplate = $.templates("#wifi-tmp");
             var html = myTemplate.render(data);
             $("#wifi").html(html);
@@ -257,7 +256,7 @@
         if (pwd) {
             $("#loading").show();
             $("#loading_content").html("正在连接wifi...");
-            $.get("http://127.0.0.1:8080/SetUpWifi/" + currentSsid + "/" + pwd, function (data, status) {
+            $.get("http://127.0.0.1:8080/api/SetUpWifi/" + currentSsid + "/" + pwd, function (data, status) {
                 if (data != "连接成功") {
                     $("#loading").hide();
                     $("#error").html(data);

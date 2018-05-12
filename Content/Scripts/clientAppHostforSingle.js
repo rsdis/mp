@@ -1,25 +1,19 @@
 ﻿
 console.log("加载JS")
 
-$.connection.hub.url = "http://localhost:9999/signalr";
-var ws = $.connection.clientMessageHub;
-
-ws.client.send = function (message) {
-    console.log(message);
-    OnMessage(message);
+var ws = new WebSocket("ws://127.0.0.1:9999/");
+ws.onmessage = function (event) {
+    console.log(event.data)
+    OnMessage(event.data)
 };
-
-$.connection.hub.start().done(function () {
-    console.log("socket 加载完毕");
-});
 
 //MessageHub-发送消息
 //reboot-重启
 //shutdown-关机
 function SendMessage(json) {
-    if (ws != undefined) {
-        ws.server.receiveCommand(json);
-    }
+    $.post("http://127.0.0.1:8080/api/post_msg", json,function (result) {
+        console.log(data)
+    });
 }
 
 //MessageHub获取消息（必须要实现的JS方法）

@@ -16,7 +16,6 @@ class content_updater:
         self.update_product()
         self.update_apps()
     def get_service_id_from_remote(self,session_key):
-        #session_key = '111'
         url = '%s/%s/Device/IsActive?machineCode=%s'%(util.util_remote_service(config.const_api_name_resouce),config.const_api_name_resouce,session_key)
         print(url)
         resp = requests.get(url)
@@ -110,9 +109,6 @@ class content_updater:
             data_file.write(json.dumps(apps_info))
 
     def start(self):
-        config.const_service_id='ct001'
         self.thread.start()
 
 instance = content_updater()
-instance.start()
-input()
