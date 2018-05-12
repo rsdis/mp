@@ -4,3 +4,4 @@
 /Zips/*
 /buildin/*
 /.vscode/*
+/__pycache__/*
