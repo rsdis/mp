@@ -1,0 +1,11 @@
+<div class="circle">
+    <div class="ring">
+        {{for menuList}}
+        <a href="javascript:void(0)" class="menuItem" onclick="gotoApp('{{>StartPath}}', {{>AppId}})">
+            <img src="{{>BasicDirectory}}/{{>Icon}}" />
+            <em>{{>AppName}}</em>
+        </a>
+        {{/for}}
+    </div>
+    <span class="center"></span>
+</div>

@@ -1,0 +1,310 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>wifi链接</title>
+    <style type="text/css">
+        .softkeyboard {
+            display: inline-block;
+        }
+
+            .softkeyboard td {
+                padding: 4px;
+            }
+
+        .c_panel {
+            background-color: #333;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .input_cur {
+            border: 1px solid #f00;
+        }
+
+        .i_button {
+            border: none;
+            height: 40px;
+            width: 50px;
+            font-size: 16px;
+            font-family: "微软雅黑";
+            background-color: #666;
+            color: #fff;
+        }
+
+            .i_button:active {
+                background-color: #999;
+            }
+
+        .i_button_num {
+        }
+
+        .i_button_btn {
+            float: right;
+            width: 88px;
+        }
+
+        .i_button_bs {
+            float: right;
+            width: 148px;
+        }
+
+        .modal-dialog {
+            width: 1000px !important;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/content/scripts/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/content/scripts/loading.css">
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/content/scripts/top_menu.css">
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="loading_content">
+            <h2 id="loading_content"></h2>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <div class="top_menu_container">
+        <div class="tmc_logo">
+            <img src="http://127.0.0.1:8080/content/scripts/top_logo.png" />
+            <a style="float: right;margin:36px;font-size: 20px;" onclick="fetchWifi()">重新检索WIFI</a>
+        </div>
+        <div class="tmc_navigation">
+            <div class="tmc_menu tmc_menu_active">
+                连接Wifi
+            </div>
+            <div class="tmc_menu">
+                获取设备码
+            </div>
+            <div class="tmc_menu">
+                培训
+            </div>
+        </div>
+    </div>
+    <div class="content_container">
+        <div id="error" style="color:red"></div>
+        <table class="table table-bordered table-striped" style="text-align:center;">
+            <thead>
+                <tr style="background:#ffa600;color:#fff;">
+                    <th style="text-align:center;">wifi名</th>
+                    <th style="text-align:center;"> 信号强度</th>
+                    <th style="text-align:center;">操作</th>
+                </tr>
+            </thead>
+            <tbody id="wifi"></tbody>
+        </table>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content " style="width:1000px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">链接wifi</h4>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    <input placeholder="请输入wifi密码" id="pwd-wifi" class="form-control shuru input_cur" />
+                </div>
+                <DIV class="softkeyboard" id="softkeyboard" name="softkeyboard" style="display:block; ">
+                    <div class="c_panel shuzi" id="shuzi">
+                        <table align="center" style="width:100%" border="0" cellspacing="0" cellpadding="0"></table>
+                    </div>
+                    <div class="c_panel zimu" id="zimu" style="display:none;">
+                        <table align="center" style="width:98%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td><input class="i_button i_button_num" type=button onclick="addValue('1')" value=" 1 "></td>
+                                <td><input class="i_button i_button_num" type=button onclick="addValue('2')" value=" 2 "></td>
+                                <td><input class="i_button i_button_num" type=button onclick="addValue('3')" value=" 3 "></td>
+                                <td><input class="i_button i_button_num" type=button onclick="addValue('4')" value=" 4 "></td>
+                                <td><input class="i_button i_button_num" type=button onclick="addValue('5')" value=" 5 "></td>
+                                <td><input class="i_button i_button_num" type=button onclick="addValue('6')" value=" 6 "></td>
+                                <td><input class="i_button i_button_num" type=button onclick="addValue('7')" value=" 7 "></td>
+                                <td><input class="i_button i_button_num" type=button onclick="addValue('8')" value=" 8 "></td>
+                                <td><input class="i_button i_button_num" type=button onclick="addValue('9')" value=" 9 "></td>
+                                <td><input class="i_button i_button_num" type=button onclick="addValue('0')" value=" 0 "></td>
+                            </tr>
+                            <tr>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue('~')" value=" ~ "></td>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue('!')" value=" ! "></td>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue('@')" value=" @ "></td>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue('#')" value=" # "></td>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue('$')" value=" $ "></td>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue('%')" value=" % "></td>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue('^')" value=" ^ "></td>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue('*')" value=" * "></td>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue('(')" value=" ( "></td>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue(')')" value=" ) "></td>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue('-')" value=" - "></td>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue('+')" value=" + "></td>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue('=')" value=" = "></td>
+                            </tr>
+                            <tr>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('q')" value=" q "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('w')" value=" w "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('e')" value=" e "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('r')" value=" r "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('t')" value=" t "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('y')" value=" y "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('u')" value=" u "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('i')" value=" i "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('o')" value=" o "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('p')" value=" p "></td>
+                                <td><input class="i_button i_button_fh" type=button onClick="addValue('[')" value=" [ "></td>
+                                <td><input class="i_button i_button_fh" type=button onClick="addValue(']')" value=" ] "></td>
+                                <td><input class="i_button i_button_fh" type=button onClick="addValue('{')" value=" { "></td>
+                                <td><input class="i_button i_button_btn" type=button onClick="setCapsLock(this);" value="切换大写"></td>
+                            </tr>
+                            <tr>
+                                <td><input class="i_button i_button_fh" type=button onClick="addValue('|')" value=" | "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('a')" value=" a "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('s')" value=" s "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('d')" value=" d "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('f')" value=" f "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('g')" value=" g "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('h')" value=" h "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('j')" value=" j "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('k')" value=" k "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('l')" value=" l "></td>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue(';')" value=" ; "></td>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue(':')" value=" : "></td>
+                                <td><input class="i_button i_button_fh" type=button onClick="addValue('}')" value=" } "></td>
+                                <td><input class="i_button i_button_btn" type=button onclick="clearValue();" value=清空></td>
+                            </tr>
+                            <tr>
+                                <td><input class="i_button i_button_fh" type=button onclick="addValue('_')" value=" _ "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('z')" value=" z "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('x')" value=" x "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('c')" value=" c "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('v')" value=" v "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('b')" value=" b "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('n')" value=" n "></td>
+                                <td><input class="i_button i_button_zm" type=button onclick="addValue('m')" value=" m "></td>
+                                <td><input class="i_button i_button_fh" type=button onClick="addValue('<')" value=" < "></td>
+                                <td><input class="i_button i_button_fh" type=button onClick="addValue('>')" value=" > "></td>
+                                <td><input class="i_button i_button_fh" type=button onClick="addValue('/')" value=" / "></td>
+                                <td><input class="i_button i_button_fh" type=button onClick="addValue('?')" value=" ? "></td>
+                                <td colspan=2><input class="i_button i_button_bs" type=button value=" BackSpace" onclick="backspace();"></td>
+
+                            </tr>
+                        </table>
+                    </div>
+                </DIV>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-warning" id="connect-wifi">连接</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+</body>
+
+</html>
+<script src="http://127.0.0.1:8080/content/scripts/jquery.min.js"></script>
+<script src="http://127.0.0.1:8080/content/scripts/jsrender.min.js"></script>
+<script src="http://127.0.0.1:8080/content/scripts/bootstrap.min.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/jquery.signalR-2.2.2.min.js"></script>
+<script src="http://127.0.0.1:9999/signalr/hubs"></script>
+<script src="http://127.0.0.1:8080/content/scripts/clientAppHostforSingle.js"></script>
+<script id="wifi-tmp" type="text/x-jsrender">
+    {{for}}
+    <tr>
+        <td>{{:SSID}}</td>
+        <td>{{:wlanSignalQuality}}</td>
+        <td>
+            <input type="button" class="btn btn-warning" value="连接Wifi" onclick="connectWifi('{{:SSID}}')" />
+        </td>
+    </tr>
+    {{/for}}
+</script>
+
+<script>
+
+
+
+    var currentSsid = null;
+    function connectWifi(ssid) {
+        currentSsid = ssid;
+        $("#myModal").modal("show");
+        $("#error").html("");
+    }
+
+    function fetchWifi() {
+        $("#loading").show();
+        $("#loading_content").html("正在检索本地WIFI...")
+        $.get("http://127.0.0.1:8080/wifiSsids", function (data, status) {
+            var myTemplate = $.templates("#wifi-tmp");
+            var html = myTemplate.render(data);
+            $("#wifi").html(html);
+            $("#loading").hide();
+        });
+    }
+
+    fetchWifi();
+
+    $("#connect-wifi").click(function () {
+        var pwd = $("#pwd-wifi").val();
+        if (pwd) {
+            $("#loading").show();
+            $("#loading_content").html("正在连接wifi...");
+            $.get("http://127.0.0.1:8080/SetUpWifi/" + currentSsid + "/" + pwd, function (data, status) {
+                if (data != "连接成功") {
+                    $("#loading").hide();
+                    $("#error").html(data);
+                    $("#myModal").modal("hide");
+                }
+            });
+        }
+    })
+
+
+    //定义当前是否大写的状态
+    var CapsLockValue = 0;
+    var curEditName;
+    var check;
+    $("#zimu").show();
+    $("#shuzi").show();
+
+    //给输入的密码框添加新值
+    function addValue(newValue) {
+        CapsLockValue == 0 ? $(".input_cur").val($(".shuru").val() + newValue) : $(".input_cur").val($(".shuru").val() + newValue.toUpperCase())
+    }
+    //清空
+    function clearValue() {
+        $(".input_cur").val("");
+    }
+    //实现BackSpace键的功能
+    function backspace() {
+        var longnum = $(".input_cur").val().length;
+        var num;
+        num = $(".input_cur").val().substr(0, longnum - 1);
+        $(".input_cur").val(num);
+    }
+    //设置是否大写的值
+    function setCapsLock(o) {
+        if (CapsLockValue == 0) {
+            CapsLockValue = 1;
+            $(o).val("转化小写");
+            $.each($(".i_button_zm"), function (b, c) {
+                $(c).val($(c).val().toUpperCase());
+            });
+        } else {
+            CapsLockValue = 0;
+            $(o).val("转化大写");
+            $.each($(".i_button_zm"), function (b, c) {
+                $(c).val($(c).val().toLowerCase());
+            });
+        }
+    }
+
+</script>

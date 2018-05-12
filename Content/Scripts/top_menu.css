@@ -1,0 +1,39 @@
+﻿.top_menu_container {
+    width: 100%;
+}
+
+.tmc_logo {
+    background-color: #ffa500;
+    width: 100%;
+}
+
+    .tmc_logo img {
+        width: 300px;
+        margin: 20px 50px;
+    }
+
+.tmc_navigation {
+    display: flex;
+    flex-direction: row;
+    height: 100px;
+    padding: 0px 15%;
+    margin-top: 20px;
+}
+
+    .tmc_navigation .tmc_menu {
+        background: url("http://127.0.0.1:8080/content/scripts/top_menu_active.png");
+        background-repeat: no-repeat;
+        flex: 1;
+        text-align: center;
+        padding-top: 4.5%;
+        font-size: 20px;
+        color: #000;
+    }
+
+    .tmc_navigation .tmc_menu_active {
+        color: #fff;
+    }
+
+.content_container {
+    padding: 20px 100px;
+}

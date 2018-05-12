@@ -8,7 +8,7 @@ import subprocess
 import os
 
 class content_updater:
-    def __init_(self):
+    def __init__(self):
         self.thread = threading.Thread(target=self.__worker_thread)
 
     def __worker_thread(self):
@@ -110,6 +110,9 @@ class content_updater:
             data_file.write(json.dumps(apps_info))
 
     def start(self):
+        config.const_service_id='ct001'
         self.thread.start()
 
 instance = content_updater()
+instance.start()
+input()
