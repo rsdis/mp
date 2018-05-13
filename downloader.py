@@ -38,13 +38,22 @@ class content_updater:
         return device_info
 
     def get_default_start(self):
-        file_path = '%s/Content/AppContents/app_info.json' %(config.const_client_root())
-        if os.path.exists(file_path):
-            with open(file_path, 'r', encoding='utf-8') as data_file:
-                return json.loads(data_file.read(file_path))
-                #default
-        else:
-            return None
+        try:
+            file_path = '%s/Content/AppContents/app_info.json' %(config.const_client_root())
+            if os.path.exists(file_path):
+                with open(file_path, 'r', encoding='utf-8') as data_file:
+                    str_content = data_file.read()
+                    app_list = json.loads(str_content)
+                    for app in app_list:
+                        if app['isStart'] == True:
+                            f = util.find_file(app['startPath'],'%s/Content/AppContents/%s' %(config.const_client_root(),str(app['appId'])))
+                            finnal = f.replace(config.const_client_root(),'')
+                            return app['appId'],'%s%s'%(config.const_client_web_server_root,finnal)
+                return None
+            else:
+                return None
+        except Exception as err:
+            print(err)
 
     def update_qr_code(self):
         if config.const_service_id is None:
@@ -76,7 +85,7 @@ class content_updater:
             config.const_api_name_product), config.const_api_name_product)
         print(product_info_url)
         product_info_json = requests.get(product_info_url).json()
-        product_info_text = json.dumps(product_info_json)
+        product_info_text = json.dumps(product_info_json,ensure_ascii=False)
         #print(product_info_json)
         # download image to target folder
         for image in product_info_json['DownloadList']:
@@ -86,14 +95,24 @@ class content_updater:
             except Exception as err:
                 print(err)
         # save data file to target folder
-        with open('%s/Content/ProductResources/data.json' %
-                  (config.const_client_root()), 'w+', encoding='utf-8') as data_file:
+        data_js = '%s/Content/ProductResources/data.js' % (config.const_client_root())
+        with open(data_js, 'w+', encoding='utf-8') as data_file:
             data_file.write(product_info_text)
+        
+        pro_info = {
+                    'BasicPath' : '%s/Content/ProductResources/' % (config.const_client_root()),
+                    'DataJsonPath' : data_js,
+                    'HostBasicPath' : '%s/Content/ProductResources' % (config.const_client_web_server_root),
+                    'HostDataJsonPath' : '%s/Content/ProductResources/data.js' % (config.const_client_web_server_root)
+        }
+
+        util.set_cached_version('product_info',json.dumps(pro_info,ensure_ascii=False))
 
         # tell server product has been updated
         product_update_done_url = '%s/%s/Device/StopUpdateContent?deviceId=%s' % (util.util_remote_service(
             config.const_api_name_resouce), config.const_api_name_resouce, config.const_service_id)
-        requests.post(product_update_done_url)
+        feedback = requests.post(product_update_done_url,json={})
+        util.set_cached_version('product','inited')
 
     def update_apps(self):
         #get app info url
@@ -112,10 +131,22 @@ class content_updater:
                 util.download_extract_target(
                     app['zipPath'], target_dir, True)
                 util.set_cached_version('app_'+str(app['appId']),str(app['version']))
+
+                rv ={
+                        'AppId' : app['appId'],
+                        #'AppName' = appInfo.AppName,
+                        'StartPath' : '%s/Content/AppContents/%s/%s'%(config.const_client_root(),str(app['appId']),app['startPath']),
+                        #'Type' = appInfo.Type,
+                        'Version' : app['version'],
+                        'BasicDirectory' : '%s/Content/AppContents/%s'%(config.const_client_root(),str(app['appId'])),
+                        'IsStart' : app['isStart'],
+                        'Icon' : ""
+                    }
+                util.set_cached_version('rv_' + app['appId'],json.dumps(rv,ensure_ascii=False))
         #save data file
         with open('%s/Content/AppContents/app_info.json' %
                   (config.const_client_root()), 'w+', encoding='utf-8') as data_file:
-            data_file.write(json.dumps(apps_info))
+            data_file.write(json.dumps(apps_info,ensure_ascii=False))
 
     def start(self):
         self.thread.start()

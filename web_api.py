@@ -1,9 +1,4 @@
-
-from flask import Flask
-from flask import request
-from flask import abort, redirect, url_for
-import json
-from flask import make_response
+from flask import *
 import subprocess
 import config
 import uuid
@@ -25,16 +20,15 @@ instance = Flask(__name__)
 
 @instance.route("/api/contentInfos", methods=['GET'])
 def contentInfos():
-    data = json.load('%s/Content/AppContents/app_info.json' %
-                     (config.const_client_root()))
-    return data
-
+    file_path = '%s/Content/AppContents/app_info.json' %(config.const_client_root())
+    if os.path.exists(file_path):
+        with open(file_path, 'r', encoding='utf-8') as data_file:
+            content = json.loads(data_file.read())
+            return jsonify(json.dumps(content))
 
 @instance.route("/api/productInfos", methods=['GET'])
 def productInfos():
-    data = json.load('%s/Content/ProductResources/data.js' %
-                     (config.const_client_root()))
-    return data
+    return jsonify(util.get_cached_version('product_info'))
 
 
 @instance.route("/api/qrByUnique/<unique>", methods=['GET'])
@@ -85,15 +79,16 @@ def RegisterCode():
 @instance.route("/api/post_msg", methods=['POST'])
 def post_msg():
     form = request.get_json()
-    ty = form['type']
-    if ty == 'shutdown':
-        subprocess.call('sudo','halt')
-    if ty == 'reboot':
-        subprocess.call('sudo','reboot')
+    if form is not None:
+        ty = form['type']
+        if ty == 'shutdown':
+            subprocess.call('sudo','halt')
+        if ty == 'reboot':
+            subprocess.call('sudo','reboot')
     return None
 
 
 def woker():
-    instance.run(threaded=True)
+    instance.run()
 
 stater = threading.Thread(target=woker)

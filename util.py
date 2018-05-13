@@ -47,3 +47,9 @@ def download_extract_target(download_uri, target_dir, is_overwirte):
 
 def download_file_to_target(download_uri, target_dir, is_overwirte):
     subprocess.call(['cd ' + target_dir + ' ; curl -O ' + download_uri],shell=True)
+
+
+def find_file(name, path):
+    for root, dirs, files in os.walk(path):
+        if name in files:
+            return os.path.join(root, name)

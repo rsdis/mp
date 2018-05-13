@@ -8,7 +8,7 @@ ws.onmessage = function (event) {
 };
 
 function getAllContentInfos(callback) {
-    $.get("http://127.0.0.1:8080/api/contentinfos", function (data, status) {
+    $.get("http://127.0.0.1:8080/api/contentInfos", function (data, status) {
         console.log(data);
         callback(data);
     });

@@ -57,17 +57,19 @@ if config.const_service_id is None:
 #start default page
 chrome.instance.start('%s/Content/default.html'%(config.const_client_web_server_root))
 #start content updater
-downloader.instance.start()
-time.sleep(5)
+#downloader.instance.start()
 
 #reload for default start
-default_app = downloader.instance.get_default_start()
-if default_app is not None:
-    msg = {
-        'MessageType':0,
-        'MessageData':default_app['StartPath']
-    }
-    web_socket.instance.send(json.dumps(msg))
+default_app,start_path = downloader.instance.get_default_start()
+while True:
+    if default_app is not None:
+        msg = {
+            'MessageType':0,
+            'MessageData':start_path
+        }
+        #web_socket.instance.send(json.dumps(msg))
+    time.sleep(5)
 
-wait_event = threading.Event()
-wait_event.wait()
+quite = ''
+while quite != 'q':
+    quite = input()
