@@ -7,7 +7,7 @@ import threading
 import util
 import config
 import requests
-
+import json
 instance = Flask(__name__)
 # /opt/rsdis/config
 # /opt/rsdis/apps
@@ -20,11 +20,14 @@ instance = Flask(__name__)
 
 @instance.route("/api/contentInfos", methods=['GET'])
 def contentInfos():
-    file_path = '%s/Content/AppContents/app_info.json' %(config.const_client_root())
-    if os.path.exists(file_path):
-        with open(file_path, 'r', encoding='utf-8') as data_file:
-            content = json.loads(data_file.read())
-            return jsonify(json.dumps(content))
+    applist = []
+    dr = '%s/buildin/vers'%(config.const_client_root())
+    for root, dirs, files in os.walk(dr, topdown=False):
+        for name in files:
+            if name.startswith('rv_'):
+                ver_name = name.replace('.ver','')
+                applist.append(json.loads(util.get_cached_version(ver_name)))
+    return jsonify(applist)
 
 @instance.route("/api/productInfos", methods=['GET'])
 def productInfos():

@@ -128,21 +128,21 @@ class content_updater:
                 target_dir = target_dir +str(app['appId'])
                 subprocess.call(['mkdir',target_dir])
                 # perform update
-                util.download_extract_target(
+                util.download_extract_target_cut(
                     app['zipPath'], target_dir, True)
                 util.set_cached_version('app_'+str(app['appId']),str(app['version']))
 
                 rv ={
                         'AppId' : app['appId'],
                         #'AppName' = appInfo.AppName,
-                        'StartPath' : '%s/Content/AppContents/%s/%s'%(config.const_client_root(),str(app['appId']),app['startPath']),
+                        'StartPath' : '%s/Content/AppContents/%s/%s'%(config.const_client_web_server_root,str(app['appId']),app['startPath']),
                         #'Type' = appInfo.Type,
                         'Version' : app['version'],
-                        'BasicDirectory' : '%s/Content/AppContents/%s'%(config.const_client_root(),str(app['appId'])),
+                        'BasicDirectory' : '%s/Content/AppContents/%s'%(config.const_client_web_server_root,str(app['appId'])),
                         'IsStart' : app['isStart'],
                         'Icon' : ""
                     }
-                util.set_cached_version('rv_' + app['appId'],json.dumps(rv,ensure_ascii=False))
+                util.set_cached_version('rv_' + str(app['appId']),json.dumps(rv,ensure_ascii=False))
         #save data file
         with open('%s/Content/AppContents/app_info.json' %
                   (config.const_client_root()), 'w+', encoding='utf-8') as data_file:
