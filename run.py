@@ -57,7 +57,7 @@ if config.const_service_id is None:
 #start default page
 chrome.instance.start('%s/Content/default.html'%(config.const_client_web_server_root))
 #start content updater
-downloader.instance.start()
+#downloader.instance.start()
 
 #reload for default start
 default_app,start_path = downloader.instance.get_default_start()
