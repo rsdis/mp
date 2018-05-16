@@ -140,7 +140,7 @@ class content_updater:
                         'Version' : app['version'],
                         'BasicDirectory' : '%s/Content/AppContents/%s'%(config.const_client_web_server_root,str(app['appId'])),
                         'IsStart' : app['isStart'],
-                        'Icon' : ""
+                        'Icon' : app['icon']
                     }
                 util.set_cached_version('rv_' + str(app['appId']),json.dumps(rv,ensure_ascii=False))
         #save data file
