@@ -20,6 +20,7 @@ instance = Flask(__name__)
 
 @instance.route("/api/contentInfos", methods=['GET'])
 def contentInfos():
+    util.log_info('web_api_server','recieve call for contentInfos')
     applist = []
     dr = '%s/buildin/vers'%(config.const_client_root())
     for root, dirs, files in os.walk(dr, topdown=False):
@@ -31,11 +32,13 @@ def contentInfos():
 
 @instance.route("/api/productInfos", methods=['GET'])
 def productInfos():
+    util.log_info('web_api_server','recieve call for productInfos')
     return jsonify(util.get_cached_version('product_info'))
 
 
 @instance.route("/api/qrByUnique/<unique>", methods=['GET'])
 def qrByUnique(unique):
+    util.log_info('web_api_server','recieve call for qrByUnique')
     ret_obj = {
         'Id': str(uuid.uuid1()),
         'FileName': unique,
@@ -47,6 +50,7 @@ def qrByUnique(unique):
 
 @instance.route("/api/qrInfos", methods=['GET'])
 def qrInfos():
+    util.log_info('web_api_server','recieve call for qrInfos')
     ret = []
     for root, dirs, files in os.walk('%s/content/QrCodeResources/'):
         for name in files:
@@ -73,6 +77,7 @@ def SetUpWifi(ssid, pwd):
 
 @instance.route("/api/RegisterCode", methods=['GET'])
 def RegisterCode():
+    util.log_info('web_api_server','recieve call for register code')
     url = '%s/%s/WechatQrcode/CreateDeviceActivationQrcode'%(util.util_remote_service(config.const_api_name_wechat),config.const_api_name_wechat)
     data = util.get_cached_version('mc')
     rsp = requests.post(url,json=data)
@@ -81,7 +86,9 @@ def RegisterCode():
 
 @instance.route("/api/post_msg", methods=['POST'])
 def post_msg():
+    util.log_info('web_api_server','recieve call for post message')
     form = request.get_json()
+    util.log_info('web_api_server','recieve call for contentInfos with message ' + json.dumps(form,ensure_ascii=False))
     if form is not None:
         ty = form['type']
         if ty == 'shutdown':

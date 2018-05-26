@@ -4,6 +4,7 @@ import os
 import subprocess
 import uuid
 import requests
+import logging
 
 
 def util_remote_service(service_name):
@@ -62,3 +63,21 @@ def find_file(name, path):
     for root, dirs, files in os.walk(path):
         if name in files:
             return os.path.join(root, name)
+
+logging.basicConfig(level=logging.INFO,
+                format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+                datefmt='%a, %d %b %Y %H:%M:%S',
+                filename='buildin/logs/service_log.log',
+                filemode='w')
+
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
+console.setFormatter(formatter)
+logging.getLogger('').addHandler(console)
+
+def log_info(sender,message):
+    logging.info('%s==>%s'%(sender,message))
+def log_error(sender,message):
+    logging.error('%s==>%s'%(sender,message))
+    

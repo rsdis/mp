@@ -5,6 +5,7 @@ import websockets
 import threading
 import time
 import queue
+import util
 
 
 class web_socket_server:
@@ -33,7 +34,7 @@ class web_socket_server:
                     self.__outbound.pop(key)
                     return
             except Exception as err:
-                print(err)
+                util.log_error('web_socket_server',err)
 
     def start(self):
         loop = asyncio.new_event_loop()

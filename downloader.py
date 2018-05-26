@@ -16,11 +16,14 @@ class content_updater:
         while True:
             try:
                 self.update_qr_code()
+                util.log_info('downloader','completed qr code update')
                 self.update_product()
+                util.log_info('downloader','completed product update')
                 self.update_apps()
-                time.sleep(60*60)
+                util.log_info('downloader','completed apps update')
+                time.sleep(10)
             except Exception as err:
-                print(err)
+                util.log_error('downloader',err)
     def get_service_id_from_remote(self,session_key):
         url = '%s/%s/Device/IsActive?machineCode=%s'%(util.util_remote_service(config.const_api_name_resouce),config.const_api_name_resouce,session_key)
         print(url)
