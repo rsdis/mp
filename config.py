@@ -1,6 +1,6 @@
 import os
-const_etcd_host = 'rsdis.niubus.com'
-const_etcd_port = 2379
+const_etcd_host = 'api.rsdis.meetingzen.cn'
+const_etcd_port = 443
 const_api_name_webcontent = 'rsdis-platform-web-content-management'
 const_api_name_product = 'rsdis-platform-product-metadata'
 const_api_name_resouce = 'rsdis-platform-system'
