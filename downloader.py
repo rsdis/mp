@@ -7,6 +7,7 @@ import threading
 import subprocess
 import os
 import time
+import wifi_checker
 
 class content_updater:
     def __init__(self):
@@ -15,12 +16,14 @@ class content_updater:
     def __worker_thread(self):
         while True:
             try:
-                self.update_qr_code()
-                util.log_info('downloader','completed qr code update')
-                self.update_product()
-                util.log_info('downloader','completed product update')
-                self.update_apps()
-                util.log_info('downloader','completed apps update')
+                #check current wifi is available.
+                if wifi_checker.instance.is_network_available() == True:
+                    self.update_qr_code()
+                    util.log_info('downloader','completed qr code update')
+                    self.update_product()
+                    util.log_info('downloader','completed product update')
+                    self.update_apps()
+                    util.log_info('downloader','completed apps update')
                 time.sleep(10)
             except Exception as err:
                 util.log_error('downloader',err)
