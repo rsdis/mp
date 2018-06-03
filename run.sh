@@ -1,10 +1,17 @@
 #!/bin/bash
 
-#go to the working folder
+#set auto lock false
+gsettings set org.gnome.desktop.screensaver lock-enabled false
+gsettings set org.gnome.desktop.screensaver lock-delay 99999999
+gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
+#disable power saving
+sudo xset -dpms 
+
+#perform update
 cd ~/dis
 
-service_id_path=~/dis/buildin/vers/service_id.ver
-client_ver_path=~/dis/buildin/vers/client.ver
+service_id_path=~/fview/dis/buildin/vers/service_id.ver
+client_ver_path=~/fview/dis/buildin/vers/client.ver
 
 service_id=''
 client_ver=''
@@ -28,27 +35,49 @@ else
     client_ver='empty client ver'
 fi
 
-tmp="curl -s http://localhost:8080/Content/content.json|grep  ct001"
-echo $tmp
-remote=`$tmp`
+#pick up remote version line
+query_version="curl -s http://localhost:8080/Content/content.json|grep "$service_id
+version_line=$(eval $query_version)
 
-echo $remote
-echo $service_id
-echo $client_ver
+echo 'get remote line the version command is : '$version_line
+i=0
+for el in $version_line
+do
+    if [ $i -eq 1 ];then
+        client_target_ver=$el
+    fi
 
+    if [ $i -eq 2 ];then
+        target_version_download_url=$el
+    fi
+    i=$(( $i + 1 ))
+done
+
+echo 'target version is : '$client_target_ver
+echo 'target download url is : '$target_version_download_url
 
 #special url
 
+if [ "$client_ver" != "$client_target_ver" ];then
+echo 'perform updating'
+cd ~ 
+wget -O client.zip $target_version_download_url
+unzip -o client.zip -d ./fview
+rm -f client.zip
+rm -f $client_ver_path
+echo "$client_target_ver" >>  $client_ver_path
+fi
 
 #set auto start
-running_folder=`pwd`
-started=`grep "run.sh" ~/.profile`
+started=`grep "fview" ~/.profile`
 echo $started
-if [$started == ""]
-then
-    cmd='sh '$running_folder'/dis/run.sh'
+
+if [ -z $started ];then
+    cmd='sh ~/fview/dis/run.sh'
     echo $cmd >> ~/.profile
 fi
+
+
 
 #start progra
 #python3.6 run.py
