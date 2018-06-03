@@ -87,14 +87,16 @@ def RegisterCode():
 @instance.route("/api/post_msg", methods=['POST'])
 def post_msg():
     util.log_info('web_api_server','recieve call for post message')
-    form = request.get_json()
-    util.log_info('web_api_server','recieve call for contentInfos with message ' + json.dumps(form,ensure_ascii=False))
-    if form is not None:
-        ty = form['type']
-        if ty == 'shutdown':
-            subprocess.call('sudo','halt')
-        if ty == 'reboot':
-            subprocess.call('sudo','reboot')
+    ty=request.form['type']
+    if ty == 'shutdown':
+        subprocess.call('sudo','halt')
+    if ty == 'reboot':
+        subprocess.call('sudo','reboot')
+    if ty == 'setVolumn':
+        volumn=request.form['volumn']
+        subprocess.Popen(['amixer','set','Master',volumn],stdout=subprocess.PIPE)
+       
+      
     return None
 
 
