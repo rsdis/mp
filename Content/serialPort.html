@@ -1,0 +1,207 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>开机配置</title>
+    <style type="text/css">
+    </style>
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/content/scripts/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/content/scripts/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/content/scripts/top_menu.css">
+    <style>
+        #backurl {
+            float: right;
+            margin-top: 40px;
+            width: 80px;
+            height: 40px;
+            margin-right: 10px;
+            visibility:hidden;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class="top_menu_container">
+        <div class="tmc_logo">
+            <img src="http://127.0.0.1:8080/content/scripts/top_logo.png" />
+            <button class="btn btn-primary" id="backurl"  backurl="" onclick="onBack(this)">返回</button>
+        </div>
+    </div>
+    <div class="content_container">
+        <div id="error" style="color:red"></div>
+        <input type="radio" value="manual" name="model" /> 手动开机
+
+        <input type="radio" value="daily" name="model" checked /> 每日开机关机设置 &nbsp;&nbsp;&nbsp;
+
+
+        <!--<form role="form" style="margin-top:20px;" id="next" hidden>
+            <div class="form-group">
+                <label for="name">下一次开机时间</label>
+                <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd HH:mm:ss" data-link-field="dtp_input1">
+                    <input class="form-control" size="16" type="text" value="" readonly id="next_open_datetime">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name">下一次关机时间</label>
+                <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd HH:mm:ss" data-link-field="dtp_input1">
+                    <input class="form-control" size="16" type="text" value="" readonly id="next_close_datetime">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+            </div>
+        </form>-->
+
+        <form role="form" style="margin-top:20px;" id="manual" hidden></form>
+
+
+        <form role="form" style="margin-top:20px;" id="daily">
+            <div class="form-group">
+                <label for="name">每日开机时间</label>
+                <div class="input-group date form_time col-md-5" data-date="" data-date-format="hh:ii" data-link-field="dtp_input3" data-link-format="hh:ii">
+                    <input class="form-control" size="16" type="text" value="" readonly id="daily_openTime">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="name">每日关机时间</label>
+                <div class="input-group date form_time col-md-5" data-date="" data-date-format="hh:ii" data-link-field="dtp_input3" data-link-format="hh:ii">
+                    <input class="form-control" size="16" type="text" value="" readonly id="daily_closeTime">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                </div>
+            </div>
+        </form>
+
+        <button class="btn btn-primary" id="update">更改</button>
+    </div>
+
+</body>
+
+</html>
+<script src="http://127.0.0.1:8080/content/scripts/jquery.min.js"></script>
+<script src="http://127.0.0.1:8080/content/scripts/bootstrap.min.js"></script>
+<script src="http://127.0.0.1:8080/content/scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="http://127.0.0.1:8080/content/scripts/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/jquery.signalR-2.2.2.min.js"></script>
+<script src="http://127.0.0.1:9999/signalr/hubs"></script>
+<script src="http://127.0.0.1:8080/content/scripts/clientAppHostforSingle.js"></script>
+
+<script>
+
+
+    var backurl  = GetQueryString("backurl");
+    if (backurl) {
+        $("#backurl").css("visibility", "visible");
+        $("#backurl").attr("backurl",backurl);
+    }
+
+    var currModel = "daily"
+
+    $(function () {
+        $("input:radio").bind("click", function () {
+            var model = $(this).val();
+
+            if (model === "next") {
+                $("#next").show();
+                $("#daily").hide();
+                $("#manual").hide();
+            } else if (model === "daily") {
+                $("#daily").show();
+                $("#manual").hide();
+                $("#next").hide();
+            } else if (model === "manual") {
+                $("#manual").show();
+                $("#daily").hide();
+                $("#next").hide();
+            }
+
+            currModel = model;
+        });
+
+        $("#update").click(function () {
+            var json = "";
+            if (currModel === "next") {
+                var next_open_datetime = $("#next_open_datetime").val();
+
+                var next_close_datetime = $("#next_close_datetime").val();
+
+
+                var jsonObj = {
+                    type: "setBootTimes",
+                    model: currModel,
+                    next_open_datetime: next_open_datetime,
+                    next_close_datetime: next_close_datetime,
+                };
+
+                json = JSON.stringify(jsonObj);
+
+            } else if (currModel === "daily") {
+
+                var openTime = $("#daily_openTime").val();
+                var closeTime = $("#daily_closeTime").val()
+
+                if (!openTime || !closeTime) {
+                    $("#error").html("请选择开机时间或关机时间");
+                    return;
+                }
+
+
+                if (closeTime <= openTime) {
+                    $("#error").html("关机时间不能小于开机时间");
+                    return;
+                } else {
+                    $("#error").html("");
+                }
+
+                var jsonObj = {
+                    type: "setBootTimes",
+                    model: currModel,
+                    openTime: openTime,
+                    closeTime: closeTime,
+                }
+
+                json = JSON.stringify(jsonObj);
+            } else if (currModel === "manual") {
+                var jsonObj = {
+                    type: "setBootTimes",
+                    model: currModel,
+                }
+                json = JSON.stringify(jsonObj);
+            }
+
+            SendMessage(json);
+        });
+    })
+
+    $('.form_datetime').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
+
+    $('.form_time').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 1,
+        minView: 0,
+        maxView: 1,
+        forceParse: 0
+    });
+
+
+
+</script>

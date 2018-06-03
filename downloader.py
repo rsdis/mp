@@ -24,6 +24,7 @@ class content_updater:
                 time.sleep(10)
             except Exception as err:
                 util.log_error('downloader',err)
+                
     def get_service_id_from_remote(self,session_key):
         url = '%s/%s/Device/IsActive?machineCode=%s'%(util.util_remote_service(config.const_api_name_resouce),config.const_api_name_resouce,session_key)
         print(url)
@@ -91,7 +92,7 @@ class content_updater:
         product_info_text = json.dumps(product_info_json,ensure_ascii=False)
         #print(product_info_json)
         # download image to target folder
-        for image in product_info_json['DownloadList']:
+        for image in product_info_json['downloadList']:
             try:
                 util.download_file_to_target(
                     image, '%s/Content/ProductResources/' % (config.const_client_root()), True)
@@ -122,6 +123,7 @@ class content_updater:
         app_url_info = '%s/%s/AppContent/getNewestVersionOfZipBy?appKey=%s' % (util.util_remote_service(
             config.const_api_name_webcontent), config.const_api_name_webcontent, config.const_service_id)
         #get app entitys
+        util.log_info('update_apps', app_url_info)
         apps_info = requests.get(app_url_info).json()
         #check app is any version different
         for app in apps_info:

@@ -13,6 +13,7 @@ import time
 import uuid
 import threading
 import json
+import time
 
 util.log_info("main",'service starting')
 # init machine code
@@ -62,7 +63,7 @@ if config.const_service_id is None:
             util.log_info("main",'check status if the machine code related device has been binded')
             time.sleep(1)
             temp_serviceid = downloader.instance.get_service_id_from_remote(machine_code)
-            #temp_serviceid='ct001'
+            temp_serviceid='ct001'
         except Exception as err:
             util.log_error('main',err)
     util.log_info("main",'service id picked from server end, write it into local cache')
@@ -71,8 +72,14 @@ if config.const_service_id is None:
 
 #start default page
 util.log_info("main",'start chrom process with default page')
-chrome.instance.start('%s/Content/default.html'%(config.const_client_web_server_root))
+#chrome.instance.start('%s/Content/default.html'%(config.const_client_web_server_root))
 #start content updater
+chrome.instance.start('%s/Content/setVolumn.html'%(config.const_client_web_server_root))
+while 1==1:
+   time.sleep(1000)
+
+
+
 
 downloader.instance.start()
 util.log_info("main",'started apps,products,qrcode download and updating process.')

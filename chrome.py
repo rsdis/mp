@@ -7,11 +7,12 @@ class chrome:
         self.woker_thread = threading.Thread(target=self.__chrome_woker)
         self.start_url = None
 
+#--start-fullscreen
     def __chrome_woker(self):
         while True:
             try:
                 subprocess.call(
-                    ['chromium-browser', '--start-fullscreen', '--app=' + self.start_url])
+                    ['chromium-browser', '', '--app=' + self.start_url])
             except Exception as err:
                 print(err)
 

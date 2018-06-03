@@ -5,3 +5,4 @@
 /buildin/*
 /.vscode/*
 /__pycache__/*
+buildin/nginx.conf

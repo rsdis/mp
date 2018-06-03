@@ -42,6 +42,7 @@ def download_extract_target(download_uri, target_dir, is_overwirte):
     if is_overwirte == True:
         path = target_dir + '/*'
         subprocess.call(['rm', '-f',path])
+    subprocess.call(['mkdir',tmp_file])
     subprocess.call(['curl', '-o', tmp_file, download_uri])
     subprocess.call(['unzip', '-o', tmp_file, '-d', target_dir])
     subprocess.call(['rm', '-f', tmp_file])
