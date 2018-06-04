@@ -21,16 +21,17 @@ sudo apt-get -y install python3.6
 curl https://bootstrap.pypa.io/get-pip.py | sudo python3.6
 
 sudo apt-get -y install chromium-browser
+#menu config chrome
+chromium-browser
 
 sudo apt-get -y install curl
 sudo apt-get -y install zip
 sudo apt-get -y install nginx
 
 #install python library
-pip3.6 install flask
-pip3.6 install websockets
-pip3.6 install python-etcd
-pip3.6 install requests
+sudo pip3.6 install flask
+sudo pip3.6 install websockets
+sudo pip3.6 install python-etcd
 
 #donload default start up apps
 cd ~ 
