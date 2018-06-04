@@ -77,5 +77,6 @@ if [ -z $started ];then
     echo $cmd >> ~/.profile
 fi
 
+
 #start application
 python3.6 run.py
