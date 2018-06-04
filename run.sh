@@ -36,7 +36,7 @@ else
 fi
 
 #pick up remote version line
-query_version="curl -s http://localhost:8080/Content/content.json|grep "$service_id
+query_version="curl -s http://rsdisprd.blob.core.chinacloudapi.cn/install/package_update_index/client_ver.txt | grep "$service_id
 version_line=$(eval $query_version)
 
 echo 'get remote line the version command is : '$version_line
@@ -77,7 +77,5 @@ if [ -z $started ];then
     echo $cmd >> ~/.profile
 fi
 
-
-
-#start progra
-#python3.6 run.py
+#start application
+python3.6 run.py

@@ -29,7 +29,7 @@ pip3.6 install requests
 
 #donload default start up apps
 cd ~ 
-wget -O client.zip http://localhost:8080/Content/mydis.zip
+wget -O client.zip http://rsdisprd.blob.core.chinacloudapi.cn/install/default_install_package/dis.zip
 unzip -o client.zip -d ./fview
 rm -f client.zip
 #write service id
