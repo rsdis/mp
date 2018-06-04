@@ -18,7 +18,7 @@ sudo apt-get -y remove update-manager
 sudo add-apt-repository -y ppa:deadsnakes/ppa
 sudo apt-get update
 sudo apt-get -y install python3.6
-curl https://bootstrap.pypa.io/get-pip.py | sudo python3.6
+
 
 sudo apt-get -y install chromium-browser
 #menu config chrome
@@ -28,6 +28,7 @@ sudo apt-get -y install curl
 sudo apt-get -y install zip
 sudo apt-get -y install nginx
 
+curl https://bootstrap.pypa.io/get-pip.py | sudo python3.6
 #install python library
 sudo pip3.6 install flask
 sudo pip3.6 install websockets
