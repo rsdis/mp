@@ -14,13 +14,18 @@ echo "=================================================================="
 sudo apt-get -y remove update-manager
 #c. set desktop background image
 #d. install chrom,python,nginx and python dependency
+#install python
+sudo add-apt-repository -y ppa:deadsnakes/ppa
 sudo apt-get update
+sudo apt-get -y install python3.6
+curl https://bootstrap.pypa.io/get-pip.py | sudo python3.6
+
+
+
 sudo apt-get -y install curl
 sudo apt-get -y install zip
 sudo apt-get -y install nginx
-#install python
-sudo apt-get -y install python3.6
-sudo apt-get -y install python3-pip
+
 #install python library
 pip3.6 install flask
 pip3.6 install websockets

@@ -8,7 +8,6 @@ gsettings set org.gnome.desktop.screensaver idle-activation-enabled false
 sudo xset -dpms 
 
 #perform update
-cd ~/dis
 
 service_id_path=~/fview/dis/buildin/vers/service_id.ver
 client_ver_path=~/fview/dis/buildin/vers/client.ver
@@ -79,4 +78,5 @@ fi
 
 
 #start application
+cd ~/fview/dis/
 python3.6 run.py
