@@ -104,6 +104,7 @@ class content_updater:
                         if app['isStart'] == True:
                             f = util.find_file(app['startPath'],'%s/Content/AppContents/%s' %(config.const_client_root(),str(app['appId'])))
                             finnal = f.replace(config.const_client_root(),'')
+                            config.current_app_id=app['appId']
                             return app['appId'],'%s%s'%(config.const_client_web_server_root,finnal)
                 return None
             else:
@@ -220,14 +221,20 @@ class content_updater:
                         util.remove_cached_version('app_' + str(verId))
                         util.remove_cached_version('rv_' + str(verId))
                         isNeedReloadChrome = True
-        
+
+        curr_default_app,curr_start_path = self.get_default_start()
+
         #save data file
         with open('%s/Content/AppContents/app_info.json' %
                   (config.const_client_root()), 'w+', encoding='utf-8') as data_file:
             data_file.write(json.dumps(apps_info,ensure_ascii=False))
 
+        
         #reload chrome
         default_app,start_path = self.get_default_start()
+        if curr_default_app != default_app and isNeedReloadChrome==False:
+            isNeedReloadChrome=True
+
         util.log_info("downloader",'get default apps')
         if default_app is not None and isNeedReloadChrome == True:
             msg = {
@@ -240,4 +247,3 @@ class content_updater:
         self.thread.start()
 
 instance = content_updater()
-instance.set_boot_power()
