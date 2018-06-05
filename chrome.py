@@ -12,7 +12,7 @@ class chrome:
         while True:
             try:
                 subprocess.call(
-                    ['chromium-browser', '--start-fullscreen', "--disk-cache-dir=/dev/null --disk-cache-size=1", '--app=' + self.start_url])
+                    ['chromium-browser','--start-fullscreen', "--disk-cache-dir=/dev/null --disk-cache-size=1", '--app=' + self.start_url,'--user-data-dir=/opt/chromium-browser'])
             except Exception as err:
                 print(err)
 
