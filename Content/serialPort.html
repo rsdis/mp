@@ -6,9 +6,9 @@
     <title>开机配置</title>
     <style type="text/css">
     </style>
-    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/content/scripts/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/content/scripts/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/content/scripts/top_menu.css">
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/Content/Scripts/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/Content/Scripts/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/Content/Scripts/top_menu.css">
     <style>
         #backurl {
             float: right;
@@ -26,7 +26,7 @@
 <body>
     <div class="top_menu_container">
         <div class="tmc_logo">
-            <img src="http://127.0.0.1:8080/content/scripts/top_logo.png" />
+            <img src="http://127.0.0.1:8080/Content/Scripts/top_logo.png" />
             <button class="btn btn-primary" id="backurl"  backurl="" onclick="onBack(this)">返回</button>
         </div>
     </div>
@@ -84,13 +84,11 @@
 </body>
 
 </html>
-<script src="http://127.0.0.1:8080/content/scripts/jquery.min.js"></script>
-<script src="http://127.0.0.1:8080/content/scripts/bootstrap.min.js"></script>
-<script src="http://127.0.0.1:8080/content/scripts/bootstrap-datetimepicker.min.js"></script>
-<script src="http://127.0.0.1:8080/content/scripts/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="http://127.0.0.1:8080/Content/Scripts/jquery.signalR-2.2.2.min.js"></script>
-<script src="http://127.0.0.1:9999/signalr/hubs"></script>
-<script src="http://127.0.0.1:8080/content/scripts/clientAppHostforSingle.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/jquery.min.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/bootstrap.min.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="http://127.0.0.1:8080/Content/Scripts/clientAppHostforSingle.js"></script>
 
 <script>
 
@@ -139,7 +137,7 @@
                     next_close_datetime: next_close_datetime,
                 };
 
-                json = JSON.stringify(jsonObj);
+                json = jsonObj;
 
             } else if (currModel === "daily") {
 
@@ -166,16 +164,23 @@
                     closeTime: closeTime,
                 }
 
-                json = JSON.stringify(jsonObj);
+                json = jsonObj;
             } else if (currModel === "manual") {
                 var jsonObj = {
                     type: "setBootTimes",
                     model: currModel,
                 }
-                json = JSON.stringify(jsonObj);
+                json = jsonObj;
             }
 
-            SendMessage(json);
+            SendMessage(json,function(res){
+                console.log(res)
+                if(res==='fail'){
+                    $("#error").html("设置失败,请联系设备人员检查设备是否连接");
+                }else{
+                    $("#error").html('');
+                }
+            });
         });
     })
 

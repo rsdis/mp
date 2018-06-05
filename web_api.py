@@ -8,6 +8,8 @@ import util
 import config
 import requests
 import json
+import serial_port
+import wifi_checker
 instance = Flask(__name__)
 # /opt/rsdis/config
 # /opt/rsdis/apps
@@ -67,12 +69,15 @@ def qrInfos():
 
 @instance.route("/api/wifiSsids", methods=['GET'])
 def wifiSsids():
-    return
+    wifis=wifi_checker.instance.scan_wifi_list()
+    return json.dumps(wifis)
 
 
 @instance.route("/api/SetUpWifi/<ssid>/<pwd>", methods=['GET'])
 def SetUpWifi(ssid, pwd):
-    return
+    if wifi_checker.instance.connect_wifi(ssid,pwd):
+        return '连接成功'
+    return '连接失败'
 
 
 @instance.route("/api/RegisterCode", methods=['GET'])
@@ -90,14 +95,29 @@ def post_msg():
     ty=request.form['type']
     if ty == 'shutdown':
         subprocess.call('sudo','halt')
+
     if ty == 'reboot':
         subprocess.call('sudo','reboot')
+
     if ty == 'setVolumn':
         volumn=request.form['volumn']
         subprocess.Popen(['amixer','set','Master',volumn],stdout=subprocess.PIPE)
-       
-      
-    return None
+
+    if ty == 'setBootTimes':
+        model=request.form['model']
+        if model=='daily':
+            openTime=request.form['openTime']+':00'
+            closeTime=request.form['closeTime']+':00'
+            if not serial_port.instance.setDailyTIme(openTime,closeTime):
+                return 'fail'
+
+        if model=='manual':
+            if not serial_port.instance.setModeM():
+                return 'fail'
+
+    if ty == 'currAppId':
+       config.current_app_id=request.form['appId']
+    return 'ok'
 
 
 def woker():

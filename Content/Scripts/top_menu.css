@@ -21,7 +21,7 @@
 }
 
     .tmc_navigation .tmc_menu {
-        background: url("http://127.0.0.1:8080/content/scripts/top_menu_active.png");
+        background: url("http://127.0.0.1:8080/Content/Scripts/top_menu_active.png");
         background-repeat: no-repeat;
         flex: 1;
         text-align: center;

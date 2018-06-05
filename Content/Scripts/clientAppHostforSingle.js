@@ -10,9 +10,10 @@ ws.onmessage = function (event) {
 //MessageHub-发送消息
 //reboot-重启
 //shutdown-关机
-function SendMessage(json) {
+function SendMessage(json,callback) {
     $.post("http://127.0.0.1:8080/api/post_msg", json,function (result) {
-        console.log(data)
+        if(callback)
+          callback(result);
     });
 }
 

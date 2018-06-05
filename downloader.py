@@ -7,6 +7,7 @@ import threading
 import subprocess
 import os
 import time
+import serial_port
 
 class content_updater:
     def __init__(self):
@@ -14,6 +15,13 @@ class content_updater:
 
     def __worker_thread(self):
         while True:
+
+            try:
+                self.set_boot_power()
+                util.log_info("set_boot_power",'completed set boot power')
+            except Exception as err:
+                util.log_error('set boot power error',err)
+
             try:
                 self.update_qr_code()
                 util.log_info('downloader','completed qr code update')
@@ -36,10 +44,52 @@ class content_updater:
             return None
 
     def get_device_info(self):
-        device_info_url = '%s/%s/Device/GetDetail?id=%s' % (util.util_remote_service(
-            config.const_api_name_resouce), config.const_api_name_resouce, config.const_service_id)
+        appId=-1
+        if config.current_app_id is not None:
+            appId=config.current_app_id
+        device_info_url = '%s/%s/Device/GetDetail?id=%s&source=client&appId=%s' % (util.util_remote_service(
+            config.const_api_name_resouce), config.const_api_name_resouce, config.const_service_id,appId)
         device_info = requests.get(device_info_url).json()
         return device_info
+
+    def set_boot_power(self):
+        try:
+            bat=serial_port.instance.getBat()
+            if bat is not None:
+                update_voltage_url = '%s/%s/Device/UpdateVoltage?id=%s' % (util.util_remote_service(
+                config.const_api_name_resouce), config.const_api_name_resouce, config.const_service_id)
+                feedback = requests.post(update_voltage_url,data=bat,headers={'Content-Type':'application/json'})
+        except Exception as err:
+            util.log_error("get_bat",err)
+
+        try:
+            device_info=self.get_device_info()
+            config.const_is_set_powerofboot = util.get_cached_version(config.const_is_set_powerofboot_name)    
+            if config.const_is_set_powerofboot is None and device_info['has_power_control'] is not None or config.const_is_set_powerofboot !=str(device_info['has_power_control']):
+                config.const_is_set_powerofboot=device_info['has_power_control']
+                util.set_cached_version(config.const_is_set_powerofboot_name,device_info['has_power_control'])
+       
+            if config.const_is_set_powerofboot =='True':
+                is_set_successfully=False
+                if device_info['power_setting'] == 1:
+                    if device_info['timer']['switch_mode']==0:
+                        is_set_successfully=serial_port.instance.setModeM()
+                    if device_info['timer']['switch_mode']==1:
+                        start=device_info['timer']['boot_time'].replace('T',' ')
+                        start_yms=time.strftime('%H%M%S',time.strptime(start,'%Y-%m-%d %H:%M:%S'))
+
+                        end=device_info['timer']['shutdown_time'].replace('T',' ')
+                        end_yms=time.strftime('%H%M%S',time.strptime(end,'%Y-%m-%d %H:%M:%S'))
+
+                        is_set_successfully=serial_port.instance.setDailyTIme(start_yms,end_yms)
+                        if is_set_successfully:
+                             url = '%s/%s/Device/SetupPowerControl?id=%s' % (util.util_remote_service(
+                             config.const_api_name_resouce), config.const_api_name_resouce, config.const_service_id)
+                             feedback = requests.post(url,data='2',headers={'Content-Type':'application/json'})
+        except Exception as err:
+            util.log_error("set_boot",err)
+
+     
 
     def get_default_start(self):
         try:
@@ -157,3 +207,4 @@ class content_updater:
         self.thread.start()
 
 instance = content_updater()
+instance.set_boot_power()

@@ -72,14 +72,8 @@ if config.const_service_id is None:
 
 #start default page
 util.log_info("main",'start chrom process with default page')
-#chrome.instance.start('%s/Content/default.html'%(config.const_client_web_server_root))
+chrome.instance.start('%s/Content/default.html'%(config.const_client_web_server_root))
 #start content updater
-chrome.instance.start('%s/Content/setVolumn.html'%(config.const_client_web_server_root))
-while 1==1:
-   time.sleep(1000)
-
-
-
 
 downloader.instance.start()
 util.log_info("main",'started apps,products,qrcode download and updating process.')

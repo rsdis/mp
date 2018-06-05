@@ -242,8 +242,9 @@
         $("#loading").show();
         $("#loading_content").html("正在检索本地WIFI...")
         $.get("http://127.0.0.1:8080/api/wifiSsids", function (data, status) {
+            console.log(data);
             var myTemplate = $.templates("#wifi-tmp");
-            var html = myTemplate.render(data);
+            var html = myTemplate.render(JSON.parse(data));
             $("#wifi").html(html);
             $("#loading").hide();
         });
