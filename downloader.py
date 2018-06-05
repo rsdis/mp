@@ -159,7 +159,8 @@ class content_updater:
                     'BasicPath' : '%s/Content/ProductResources/' % (config.const_client_root()),
                     'DataJsonPath' : data_js,
                     'HostBasicPath' : '%s/Content/ProductResources' % (config.const_client_web_server_root),
-                    'HostDataJsonPath' : '%s/Content/ProductResources/data.js' % (config.const_client_web_server_root)
+                    'HostDataJsonPath' : '%s/Content/ProductResources/data.js' % (config.const_client_web_server_root),
+                    'DataJson' : product_info_text
         }
 
         util.set_cached_version('product_info',json.dumps(pro_info,ensure_ascii=False))
@@ -194,12 +195,14 @@ class content_updater:
                 rv ={
                         'AppId' : app['appId'],
                         #'AppName' = appInfo.AppName,
+                        'AppName': app['appNameCN'],
                         'StartPath' : '%s/Content/AppContents/%s/%s'%(config.const_client_web_server_root,str(app['appId']),app['startPath']),
                         #'Type' = appInfo.Type,
                         'Version' : app['version'],
                         'BasicDirectory' : '%s/Content/AppContents/%s'%(config.const_client_web_server_root,str(app['appId'])),
                         'IsStart' : app['isStart'],
-                        'Icon' : app['icon']
+                        # gck
+                        'Icon' : app['icon'].replace("https://rsdisuat.blob.core.chinacloudapi.cn/image/","")
                     }
                 util.set_cached_version('rv_' + str(app['appId']),json.dumps(rv,ensure_ascii=False))
         #remove data file
@@ -214,8 +217,8 @@ class content_updater:
                         if app["appId"] == verId:
                             isRemoveThisVer = False
                     if isRemoveThisVer == True:
-                        util.remove_cached_version('app_' + verId)
-                        util.remove_cached_version('rv_' + verId)
+                        util.remove_cached_version('app_' + str(verId))
+                        util.remove_cached_version('rv_' + str(verId))
                         isNeedReloadChrome = True
         
         #save data file
