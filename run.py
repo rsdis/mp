@@ -79,6 +79,7 @@ downloader.instance.start()
 util.log_info("main",'started apps,products,qrcode download and updating process.')
 
 #reload for default start
+time.sleep(5)
 default_app,start_path = downloader.instance.get_default_start()
 util.log_info("main",'get default apps')
 if default_app is not None:

@@ -9,6 +9,7 @@ import os
 import time
 import wifi_checker
 import serial_port
+import web_socket
 
 class content_updater:
     def __init__(self):
@@ -177,9 +178,11 @@ class content_updater:
         util.log_info('update_apps', app_url_info)
         apps_info = requests.get(app_url_info).json()
         #check app is any version different
+        isNeedReloadChrome = False
         for app in apps_info:
             local_ver = util.get_cached_version('app_'+str(app['appId']))
             if local_ver is None or local_ver != app['version']:
+                isNeedReloadChrome = True
                 target_dir = '%s/Content/AppContents/'%(config.const_client_root())
                 target_dir = target_dir +str(app['appId'])
                 subprocess.call(['mkdir',target_dir])
@@ -199,10 +202,36 @@ class content_updater:
                         'Icon' : app['icon']
                     }
                 util.set_cached_version('rv_' + str(app['appId']),json.dumps(rv,ensure_ascii=False))
+        #remove data file
+        dr = '%s/buildin/vers'%(config.const_client_root())
+        for root, dirs, files in os.walk(dr, topdown=False):
+            for name in files:
+                if name.startswith('app_'):
+                    verId = name.replace('.ver','')
+                    verId = int(verId.replace('app_',''))
+                    isRemoveThisVer = True
+                    for app in apps_info:
+                        if app["appId"] == verId:
+                            isRemoveThisVer = False
+                    if isRemoveThisVer == True:
+                        util.remove_cached_version('app_' + verId)
+                        util.remove_cached_version('rv_' + verId)
+                        isNeedReloadChrome = True
+        
         #save data file
         with open('%s/Content/AppContents/app_info.json' %
                   (config.const_client_root()), 'w+', encoding='utf-8') as data_file:
             data_file.write(json.dumps(apps_info,ensure_ascii=False))
+
+        #reload chrome
+        default_app,start_path = self.get_default_start()
+        util.log_info("downloader",'get default apps')
+        if default_app is not None and isNeedReloadChrome == True:
+            msg = {
+                'MessageType':0,
+                'MessageData':start_path
+            }
+            web_socket.instance.send(json.dumps(msg))
 
     def start(self):
         self.thread.start()
