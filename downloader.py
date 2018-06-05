@@ -7,6 +7,7 @@ import threading
 import subprocess
 import os
 import time
+import wifi_checker
 import serial_port
 
 class content_updater:
