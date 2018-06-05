@@ -35,6 +35,11 @@ def set_cached_version(resource, value):
     with open(ver, 'w+') as content_file:
         content_file.write(str(value))
 
+def remove_cached_version(resource):
+    ver = '%s/buildin/vers/%s.ver' % (config.const_client_root(), resource)
+    if os.path.exists(ver):
+        os.remove(ver)
+        return True
 
 def download_extract_target(download_uri, target_dir, is_overwirte):
     tmp_file = '%s/buildin/tmp/%s' % (config.const_client_root(),
