@@ -57,10 +57,12 @@ class content_updater:
     def set_boot_power(self):
         try:
             bat=serial_port.instance.getBat()
+            util.log_info("bat",bat)
             if bat is not None:
                 update_voltage_url = '%s/%s/Device/UpdateVoltage?id=%s' % (util.util_remote_service(
                 config.const_api_name_resouce), config.const_api_name_resouce, config.const_service_id)
-                feedback = requests.post(update_voltage_url,data=bat,headers={'Content-Type':'application/json'})
+                batValue=bat[3:7]
+                feedback = requests.post(update_voltage_url,data=batValue,headers={'Content-Type':'application/json'})
         except Exception as err:
             util.log_error("get_bat",err)
 

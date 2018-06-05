@@ -112,7 +112,7 @@ def post_msg():
                 return 'fail'
 
         if model=='manual':
-            if not serial_port.instance.setModeM():
+            if serial_port.instance.setModeM() == False:
                 return 'fail'
 
     if ty == 'currAppId':
