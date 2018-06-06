@@ -12,13 +12,13 @@ class chrome:
         while True:
             try:
                 subprocess.call(
-                    ['chromium-browser', '--start-fullscreen', "--disk-cache-dir=/dev/null --disk-cache-size=1", '--app=' + self.start_url])
+                    ['sudo','-i', '-u', 'fview', 'chromium-browser','--start-fullscreen', "--disk-cache-dir=/dev/null --disk-cache-size=1", '--app=' + self.start_url, '--disable-pinch'])
             except Exception as err:
                 print(err)
 
     def start(self, url):
         self.start_url = url
-        subprocess.call(['pkill', 'chromium-browse'])
+        subprocess.call(['pkill', 'chromium-browser'])
         self.woker_thread.start()
 
 

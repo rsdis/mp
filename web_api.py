@@ -35,7 +35,7 @@ def contentInfos():
 @instance.route("/api/productInfos", methods=['GET'])
 def productInfos():
     util.log_info('web_api_server','recieve call for productInfos')
-    return jsonify(util.get_cached_version('product_info'))
+    return util.get_cached_version('product_info')
 
 
 @instance.route("/api/qrByUnique/<unique>", methods=['GET'])
@@ -112,7 +112,7 @@ def post_msg():
                 return 'fail'
 
         if model=='manual':
-            if not serial_port.instance.setModeM():
+            if serial_port.instance.setModeM() == False:
                 return 'fail'
 
     if ty == 'currAppId':

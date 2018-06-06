@@ -57,10 +57,12 @@ class content_updater:
     def set_boot_power(self):
         try:
             bat=serial_port.instance.getBat()
+            util.log_info("bat",bat)
             if bat is not None:
                 update_voltage_url = '%s/%s/Device/UpdateVoltage?id=%s' % (util.util_remote_service(
                 config.const_api_name_resouce), config.const_api_name_resouce, config.const_service_id)
-                feedback = requests.post(update_voltage_url,data=bat,headers={'Content-Type':'application/json'})
+                batValue=bat[3:7]
+                feedback = requests.post(update_voltage_url,data=batValue,headers={'Content-Type':'application/json'})
         except Exception as err:
             util.log_error("get_bat",err)
 
@@ -104,6 +106,7 @@ class content_updater:
                         if app['isStart'] == True:
                             f = util.find_file(app['startPath'],'%s/Content/AppContents/%s' %(config.const_client_root(),str(app['appId'])))
                             finnal = f.replace(config.const_client_root(),'')
+                            config.current_app_id=app['appId']
                             return app['appId'],'%s%s'%(config.const_client_web_server_root,finnal)
                 return None
             else:
@@ -159,7 +162,8 @@ class content_updater:
                     'BasicPath' : '%s/Content/ProductResources/' % (config.const_client_root()),
                     'DataJsonPath' : data_js,
                     'HostBasicPath' : '%s/Content/ProductResources' % (config.const_client_web_server_root),
-                    'HostDataJsonPath' : '%s/Content/ProductResources/data.js' % (config.const_client_web_server_root)
+                    'HostDataJsonPath' : '%s/Content/ProductResources/data.js' % (config.const_client_web_server_root),
+                    'DataJson' : product_info_text
         }
 
         util.set_cached_version('product_info',json.dumps(pro_info,ensure_ascii=False))
@@ -194,12 +198,14 @@ class content_updater:
                 rv ={
                         'AppId' : app['appId'],
                         #'AppName' = appInfo.AppName,
+                        'AppName': app['appNameCN'],
                         'StartPath' : '%s/Content/AppContents/%s/%s'%(config.const_client_web_server_root,str(app['appId']),app['startPath']),
                         #'Type' = appInfo.Type,
                         'Version' : app['version'],
                         'BasicDirectory' : '%s/Content/AppContents/%s'%(config.const_client_web_server_root,str(app['appId'])),
                         'IsStart' : app['isStart'],
-                        'Icon' : app['icon']
+                        # gck
+                        'Icon' : app['icon'].replace("https://rsdisuat.blob.core.chinacloudapi.cn/image/","")
                     }
                 util.set_cached_version('rv_' + str(app['appId']),json.dumps(rv,ensure_ascii=False))
         #remove data file
@@ -214,17 +220,23 @@ class content_updater:
                         if app["appId"] == verId:
                             isRemoveThisVer = False
                     if isRemoveThisVer == True:
-                        util.remove_cached_version('app_' + verId)
-                        util.remove_cached_version('rv_' + verId)
+                        util.remove_cached_version('app_' + str(verId))
+                        util.remove_cached_version('rv_' + str(verId))
                         isNeedReloadChrome = True
-        
+
+        curr_default_app,curr_start_path = self.get_default_start()
+
         #save data file
         with open('%s/Content/AppContents/app_info.json' %
                   (config.const_client_root()), 'w+', encoding='utf-8') as data_file:
             data_file.write(json.dumps(apps_info,ensure_ascii=False))
 
+        
         #reload chrome
         default_app,start_path = self.get_default_start()
+        if curr_default_app != default_app and isNeedReloadChrome==False:
+            isNeedReloadChrome=True
+
         util.log_info("downloader",'get default apps')
         if default_app is not None and isNeedReloadChrome == True:
             msg = {
@@ -237,4 +249,3 @@ class content_updater:
         self.thread.start()
 
 instance = content_updater()
-instance.set_boot_power()

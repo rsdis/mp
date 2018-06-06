@@ -63,7 +63,6 @@ if config.const_service_id is None:
             util.log_info("main",'check status if the machine code related device has been binded')
             time.sleep(1)
             temp_serviceid = downloader.instance.get_service_id_from_remote(machine_code)
-            temp_serviceid='ct001'
         except Exception as err:
             util.log_error('main',err)
     util.log_info("main",'service id picked from server end, write it into local cache')

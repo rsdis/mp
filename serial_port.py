@@ -6,17 +6,18 @@ import subprocess
 import time
 import json
 import time
-import serial 
+import serial
 
 
 class serialport:
     def __init__(self):
-        self.serialport=None
+        self.serialport = None
         try:
-            serialport = serial.Serial("/dev/ttyS1",9600,timeout=2)
+            #self.serialport = serial.Serial("/dev/tty8", 9600, timeout=5)
+            self.serialport = serial.Serial("/dev/ttyS0", 9600, timeout=5)
         except EnvironmentError as err:
             print(err)
-            serialport=None
+            self.serialport = None
 
     def setSystemTIme(self,datetime):
           t='SETDATE'+time.strftime('%Y%m%d%H%M%S',time.localtime(datetime))
@@ -28,7 +29,12 @@ class serialport:
             return result != "DATEFAILE8"
 
     def getSystemTime(self):
-        cmd='GETDATE'
+        cmd = 'GETDATE'
+        result = self.processCmd(cmd)
+        return result
+    
+    def getMode(self):
+        cmd = 'GETMODE'
         result = self.processCmd(cmd)
         return result
 
@@ -77,20 +83,26 @@ class serialport:
     def processCmd(self,cmd):
         try:
             if self.serialport is not None:
-                if not self.serialport.is_open():
+                if self.serialport.is_open == False:
                     self.serialport.open()
-                    cmd+='\r'
-                    self.serialport.write(cmd)
-                    result=self.serialport.readline()
-                    return result
+                cmd += '\r'
+                self.serialport.write(cmd.encode())
+                result = self.serialport.readline()
+                util.log_info("fck_result", result.decode())
+                return result
             return None
-        except EnvironmentError as err:
-            print(err)
+        except Exception as err:
+            util.log_error("fck", err)
             return None
+
     def handleYMS(self,yms):
         arr=yms.split(':')
         return ''.join(arr)
 
 instance=serialport()
-
-
+#instance.getSystemTime()
+#instance.getBat()
+#instance.setSystemTIme(time.time())
+#instance.getMode()
+#instance.setModeD()
+#instance.setDailyTIme('03:19:00', '03:18:00')
