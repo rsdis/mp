@@ -39,6 +39,13 @@ def productInfos():
     return util.get_cached_version('product_info')
 
 
+@instance.route("/api/getPowerSettingModel", methods=['GET'])
+def getCurrentPowerSettingModel():
+    util.log_info('web_api_server','recieve current mdoel of power setting')
+    return serial_port.instance.getMode()
+    #MODEM/MODED
+    #return 'MODED'
+
 @instance.route("/api/qrByUnique/<unique>", methods=['GET'])
 def qrByUnique(unique):
     util.log_info('web_api_server','recieve call for qrByUnique')
