@@ -36,7 +36,7 @@ class serialport:
     def getMode(self):
         cmd = 'GETMODE'
         result = self.processCmd(cmd)
-        return result
+        return result.decode()
 
     def setModeM(self):
         cmd='SETMODEM'
@@ -106,6 +106,6 @@ instance=serialport()
 # instance.getSystemTime()
 #instance.getBat()
 #instance.setSystemTIme(time.time())
-#instance.getMode()
+instance.getMode()
 #instance.setModeD()
 #instance.setDailyTIme('03:19:00', '03:18:00')
