@@ -79,6 +79,7 @@
         </form>
 
         <button class="btn btn-primary" id="update">更改</button>
+        <button class="btn btn-success" onclick="history.back()">更改完成</button>        
     </div>
 
 </body>
@@ -150,12 +151,12 @@
                 }
 
 
-                if (closeTime <= openTime) {
-                    $("#error").html("关机时间不能小于开机时间");
-                    return;
-                } else {
-                    $("#error").html("");
-                }
+                // if (closeTime <= openTime) {
+                //     $("#error").html("关机时间不能小于开机时间");
+                //     return;
+                // } else {
+                //     $("#error").html("");
+                // }
 
                 var jsonObj = {
                     type: "setBootTimes",
@@ -178,7 +179,7 @@
                 if(res==='fail'){
                     $("#error").html("设置失败,请联系设备人员检查设备是否连接");
                 }else{
-                    $("#error").html('');
+                    $("#error").html('set successful');
                 }
             });
         });

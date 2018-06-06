@@ -44,7 +44,8 @@ class serialport:
         if result is None:
             return False
         else:
-            return result != "MODEFAIL"
+            # return result.decode()
+            return True
 
     def setModeD(self):
         cmd='SETMODED'
@@ -52,7 +53,8 @@ class serialport:
         if result is None:
             return False
         else:
-            return result != "MODEFAIL"
+            # return result.decode()
+            return True
 
     def setModeN(self):
         cmd='SETMODEN'
@@ -60,11 +62,12 @@ class serialport:
         if result is None:
             return False
         else:
-            return result != "MODEFAIL"
+            # return result.decode()
+            return True
 
 
     def setDailyTIme(self,openTime,closeTime):
-        if self.setModeD:
+        if self.setModeD():
             cmd='SETOPEN'+self.handleYMS(openTime)
             result=self.processCmd(cmd)
             if result is not None and result != "OPENFAIL":
@@ -100,7 +103,7 @@ class serialport:
         return ''.join(arr)
 
 instance=serialport()
-#instance.getSystemTime()
+# instance.getSystemTime()
 #instance.getBat()
 #instance.setSystemTIme(time.time())
 #instance.getMode()

@@ -10,6 +10,7 @@ import requests
 import json
 import serial_port
 import wifi_checker
+import time
 instance = Flask(__name__)
 # /opt/rsdis/config
 # /opt/rsdis/apps
@@ -112,8 +113,13 @@ def post_msg():
                 return 'fail'
 
         if model=='manual':
-            if serial_port.instance.setModeM() == False:
+            return_val = serial_port.instance.setModeM()
+            time.sleep(10)
+            util.log_info("api return serial port", return_val)
+            if return_val == False:
                 return 'fail'
+            else:
+                return 'success'
 
     if ty == 'currAppId':
        config.current_app_id=request.form['appId']
