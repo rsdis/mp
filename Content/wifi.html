@@ -257,8 +257,9 @@
         if (pwd) {
             $("#loading").show();
             $("#loading_content").html("正在连接wifi...");
+            console.log([currentSsid,pwd]);
             $.get("http://127.0.0.1:8080/api/SetUpWifi/" + currentSsid + "/" + pwd, function (data, status) {
-                if (data != "连接成功") {
+                if (data) {
                     $("#loading").hide();
                     $("#error").html(data);
                     $("#myModal").modal("hide");
