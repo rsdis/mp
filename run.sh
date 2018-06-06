@@ -79,4 +79,4 @@ fi
 
 #start application
 cd ~/fview/dis/
-python3.6 run.py
+nohup python3.6 run.py &
