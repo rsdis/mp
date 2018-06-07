@@ -21,5 +21,7 @@ class chrome:
         subprocess.call(['killall', 'chromium-browser'])
         self.woker_thread.start()
 
+    def url_change(self, url):
+        self.start_url = url
 
 instance = chrome()
