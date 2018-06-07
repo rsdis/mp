@@ -1,4 +1,5 @@
 import os
+import getpass 
 const_etcd_host = 'api.rsdis.meetingzen.cn'
 const_etcd_port = 443
 const_api_name_webcontent = 'rsdis-platform-web-content-management'
@@ -15,5 +16,5 @@ current_app_id=None
 def const_client_root():
     return os.getcwd()
 
-
-
+def const_current_login_username():
+    return getpass.getuser()

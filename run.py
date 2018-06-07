@@ -55,9 +55,11 @@ if config.const_service_id is None:
 #check is service id is empty, ask user to register with mc code
 util.log_info("main",'checking service id existed')
 if config.const_service_id is None:
-    util.log_info("main",'service id is empty,will show register page and waiting user binding')
-    chrome.instance.start('%s/Content/register.html'%(config.const_client_web_server_root))
+    util.log_info("main",'service id is  ,will show register page and waiting user binding')
     temp_serviceid = downloader.instance.get_service_id_from_remote(machine_code)
+    if temp_serviceid is None:
+        if downloader.instance.register_machine(machine_code):
+           chrome.instance.start('%s/Content/register.html'%(config.const_client_web_server_root))
     while temp_serviceid is None:
         try:
             util.log_info("main",'check status if the machine code related device has been binded')

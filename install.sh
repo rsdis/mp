@@ -22,5 +22,5 @@ pip3.6 install flask
 pip3.6 install websockets
 pip3.6 install python-etcd
 pip3.6 install requests
-
+pip3.6 install pyserial
 
