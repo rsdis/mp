@@ -34,7 +34,14 @@ class content_updater:
                 time.sleep(10)
             except Exception as err:
                 util.log_error('downloader',err)
-                
+
+    def register_machine(self,session_key):
+        url = '%s/%s/Device/Register'%(util.util_remote_service(config.const_api_name_resouce),config.const_api_name_resouce)
+        resp = requests.post(url,json=session_key,headers={'Content-Type':'application/json'})
+        if resp.status_code == 200:
+            return True
+        return False
+
     def get_service_id_from_remote(self,session_key):
         url = '%s/%s/Device/IsActive?machineCode=%s'%(util.util_remote_service(config.const_api_name_resouce),config.const_api_name_resouce,session_key)
         print(url)

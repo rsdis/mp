@@ -42,7 +42,26 @@ def productInfos():
 @instance.route("/api/getPowerSettingModel", methods=['GET'])
 def getCurrentPowerSettingModel():
     util.log_info('web_api_server','recieve current mdoel of power setting')
-    return serial_port.instance.getMode()
+    model = serial_port.instance.getMode()
+    if model == "MODELD":
+        openTime=serial_port.instance.getDailyOpenTime()
+        closeTime=serial_port.instance.getDailyCloseTIme()
+        ret_obj={
+            model:"MODELD",
+            "opemTime":openTime,
+            "closeTime":closeTime,
+        }
+        return json.dumps(ret_obj)
+    ret_obj={
+        model:"MODEM"
+    }
+    return json.dumps(ret_obj)
+    # ret_obj={
+    #     "model":"MODED",
+    #     "opemTime":"08:05",
+    #     "closeTime":"22:05"
+    # }
+    # return json.dumps(ret_obj) 
     #MODEM/MODED
     #return 'MODED'
 

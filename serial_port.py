@@ -19,6 +19,24 @@ class serialport:
             print(err)
             self.serialport = None
 
+    def getDailyOpenTime(self):
+        cmd = 'GETOPEN'
+        result = self.processCmd(cmd)
+        if result == "OPENFAIL" or result==None:
+            return ''
+        ot=result[4:]
+        openTime=ot[0:2]+":"+ot[2:4]
+        return openTime
+
+    def getDailyCloseTIme(self):
+        cmd="GETSTOP"
+        result = self.processCmd(cmd)
+        if result == "OPENFAIL" or result==None:
+            return ''
+        ct=result[4:]
+        closeTime=ct[0:2]+":"+ct[2:4]
+        return closeTime
+
     def setSystemTIme(self,datetime):
           t='SETDATE'+time.strftime('%Y%m%d%H%M%S',time.localtime(datetime))
           print(t)
@@ -109,3 +127,4 @@ instance=serialport()
 #nstance.getMode()
 #instance.setModeD()
 #instance.setDailyTIme('03:19:00', '03:18:00')
+

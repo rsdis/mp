@@ -36,7 +36,7 @@
         <input type="radio" value="daily" name="model"  id="daily" /> 每日开机关机设置 &nbsp;&nbsp;&nbsp;
 
 
-        <!--<form role="form" style="margin-top:20px;" id="next" hidden>
+        <!--<form role="form" style="margin-top:20px;" id="next-form" hidden>
             <div class="form-group">
                 <label for="name">下一次开机时间</label>
                 <div class="input-group date form_datetime col-md-5" data-date="" data-date-format="yyyy-mm-dd HH:mm:ss" data-link-field="dtp_input1">
@@ -55,10 +55,10 @@
             </div>
         </form>-->
 
-        <form role="form" style="margin-top:20px;" id="manual" hidden></form>
+        <form role="form" style="margin-top:20px;" id="manual-form" hidden></form>
 
 
-        <form role="form" style="margin-top:20px;" id="daily">
+        <form role="form" style="margin-top:20px;" id="daily-form">
             <div class="form-group">
                 <label for="name">每日开机时间</label>
                 <div class="input-group date form_time col-md-5" data-date="" data-date-format="hh:ii" data-link-field="dtp_input3" data-link-format="hh:ii">
@@ -111,11 +111,20 @@
 
     $(function () {
         $.get("http://127.0.0.1:8080/api/getPowerSettingModel", function (data) {
-                console.log(data);
-                if (data === "MODEM") {
+                var d=JSON.parse(data);
+                if (d.model === "MODEM") {
                     $("#manual").attr("checked","checked");
+                    $("#manual-form").show();
+                    $("#daily-form").hide();
+                    $("#next-form").hide();
                 } else{
                     $("#daily").attr("checked","checked");
+                    $("#daily_openTime").val(d.opemTime);
+                    $("#daily_closeTime").val(d.closeTime);
+                    $("#daily-form").show();
+                    $("#manual-form").hide();
+                    $("#next-form").hide();
+
                 }
         });
 
@@ -127,13 +136,13 @@
                 $("#daily").hide();
                 $("#manual").hide();
             } else if (model === "daily") {
-                $("#daily").show();
-                $("#manual").hide();
-                $("#next").hide();
+                $("#daily-form").show();
+                $("#manual-form").hide();
+                $("#next-form").hide();
             } else if (model === "manual") {
-                $("#manual").show();
-                $("#daily").hide();
-                $("#next").hide();
+                $("#manual-form").show();
+                $("#daily-form").hide();
+                $("#next-form").hide();
             }
 
             currModel = model;

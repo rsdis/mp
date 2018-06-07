@@ -1,6 +1,6 @@
 import threading
 import subprocess
-
+import config
 
 class chrome:
     def __init__(self):
@@ -12,13 +12,13 @@ class chrome:
         while True:
             try:
                 subprocess.call(
-                    ['sudo','-i', '-u', 'fview', 'chromium-browser','--start-fullscreen', "--disk-cache-dir=/dev/null --disk-cache-size=1", '--app=' + self.start_url, '--disable-pinch'])
+                    ['sudo','-i', '-u', config.const_current_login_username(), 'chromium-browser','--start-fullscreen', "--disk-cache-dir=/dev/null --disk-cache-size=1", '--app=' + self.start_url, '--disable-pinch'])
             except Exception as err:
                 print(err)
 
     def start(self, url):
         self.start_url = url
-        subprocess.call(['pkill', 'chromium-browser'])
+        subprocess.call(['killall', 'chromium-browser'])
         self.woker_thread.start()
 
     def url_change(self, url):
