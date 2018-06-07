@@ -13,19 +13,19 @@
     }
 
     .ring {
-        background: url("./circlebg.png") no-repeat center center;
-        background-size: contain;
         opacity: 0;
-        border-radius: 4%;
+        // border-radius: 4%;
         transform-origin: 50% 50%;
         transform: scale(0.1);
+        text-align:center;
+        font-size:0;
+        padding-top:3rem;
     }
 
     .center {
         background: url("./point.gif") no-repeat center center;
         background-size: cover;
         opacity: 0.8;
-        bottom: 0;
         color: white;
         height: 9rem;
         left: 0;
@@ -40,21 +40,57 @@
         /*box-shadow:0 0 20px 10px #000;*/
     }
 
+    .settings{
+        // border-top:1px solid #FFF;
+        height:14.5rem;
+        width: 90rem;
+        text-align:right;
+        font-size:0;
+        position: absolute;
+        bottom:0;
+        left:0;
+        display:none;
+        
+        .set_btn{
+            width:15rem;
+            height:14.5rem;
+            border:none;
+            background: no-repeat center center;            
+            background-size: 6.3rem;
+            outline:none;
+            display:none;
+        }
+
+            
+        .close_btn{
+            background-image:url("./close_btn.png");
+        }
+
+        .set_volumn_btn{
+            background-image:url("./volumn_btn.png");
+        }
+
+        .power_btn{
+            background-image: url("./power_btn.png");
+        }
+    }
+
     .menuItem {
-        border-radius: 50%;
+        // border-radius: 50%;
         color: #eeeeee;
         // display: none;
         height: 9rem;
-        margin-left: -4.5rem;
-        margin-top: -4.5rem;
-        position: absolute;
-        text-align: center;
-        width: 9rem;
+        width:15rem;
+        display:inline-block;
+        text-align:center;
         text-decoration: none;
+        margin-bottom:3rem;
 
         img {
             width: 6.3rem;
-            margin-bottom: 0.45rem;
+            // margin-bottom: 0.45rem;
+            display:block;
+            margin:0 auto 0.45rem;
         }
 
         .fa-5x {
@@ -66,10 +102,12 @@
             font-size: 1.8rem;
             line-height: 1.8rem;
             white-space: nowrap;
+            width:100%;
+            text-align:center;
         }
 
         &.show {
-            display: block;
+            display: inline-block;
         }
         /*&#btnSearch{
             em{
@@ -79,24 +117,35 @@
     }
 
     &.open {
+        background: url("./circlebg.png") no-repeat center center;
+        background-size: cover;
         height: 45rem;
-        width: 45rem;
+        width: 90rem;
         top: 45rem;
-        right: 33rem;
+        left: 9rem;
         padding-top: 0;
         padding-right: 0;
         padding-bottom: 0;
 
         .ring {
-            height: 45rem;
-            width: 45rem;
+            height: 30rem;
+            width: 90rem;
             opacity: 1;
             transform: scale(1);
         }
 
         .center {
+            display:none;
             border-color: #aaaaaa;
-            background-image: url("./point.svg");
+            // background-image: url("./point.svg");
+        }
+
+        .set_btn{
+            display:inline-block;
+        }
+        
+        .settings{
+            display:block;
         }
     }
 }

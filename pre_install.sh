@@ -5,9 +5,19 @@
 #
 #-----------------------------
 #read serviceid
+
+#touch_device_name='ETPS/2 Elantech Touchpad'
+#screen_id=`xinput list --id-only "$touch_device_name"`
+#echo $screen_id
+
 echo "============> input service id and then press enter"
 read user_input_service_id
 echo "============> your input service id is "$user_input_service_id
+
+echo "============> route screen and touch input"
+sudo xrandr -o left
+xinput set-prop "Your Touchscreen's Name" --type=float "Coordinate Transformation Matrix" 0 -1 1 1 0 0 0 0 1
+
 #a. auto login, config
 #b. disable update, the solution is remove update manager
 echo "============> remove ubuntu update manager"
@@ -23,8 +33,7 @@ sudo apt-get -y install python3.6
 echo "============> install chrome browser"
 sudo apt-get -y install chromium-browser
 #menu config chrome
-echo "============> first time mush open browser via browser, just close broswer, keep script going"
-chromium-browser
+
 
 echo "============> install curl tool"
 sudo apt-get -y install curl
@@ -51,6 +60,10 @@ echo "============> write service id into rsdis client"
 rm -f  ./fview/dis/buildin/vers/service_id.ver
 echo $user_input_service_id >> ./fview/dis/buildin/vers/service_id.ver
 #start service
+
+echo "============> first time mush open browser via browser, just close broswer, keep script going"
+chromium-browser
+
 cd ~/fview/dis/
 echo "============> start dis application"
 sh run.sh

@@ -43,13 +43,13 @@ class wifi_checker:
                         if subitems[0] == '*':
                             wifi_object={
                                 'SSID' : subitems[1],
-                                'wlanSignalQuality' : subitems[7]
+                                'wlanSignalQuality' : subitems[6]
                             }
                             result.append(wifi_object)
                         else:
                             wifi_object={
                                 'SSID' : subitems[0],
-                                'wlanSignalQuality' : subitems[6]
+                                'wlanSignalQuality' : subitems[5]
                             }
                             result.append(wifi_object)
             else:

@@ -8,6 +8,9 @@ import util
 import config
 import requests
 import json
+import serial_port
+import wifi_checker
+import time
 instance = Flask(__name__)
 # /opt/rsdis/config
 # /opt/rsdis/apps
@@ -33,8 +36,15 @@ def contentInfos():
 @instance.route("/api/productInfos", methods=['GET'])
 def productInfos():
     util.log_info('web_api_server','recieve call for productInfos')
-    return jsonify(util.get_cached_version('product_info'))
+    return util.get_cached_version('product_info')
 
+
+@instance.route("/api/getPowerSettingModel", methods=['GET'])
+def getCurrentPowerSettingModel():
+    util.log_info('web_api_server','recieve current mdoel of power setting')
+    return serial_port.instance.getMode()
+    #MODEM/MODED
+    #return 'MODED'
 
 @instance.route("/api/qrByUnique/<unique>", methods=['GET'])
 def qrByUnique(unique):
@@ -67,12 +77,15 @@ def qrInfos():
 
 @instance.route("/api/wifiSsids", methods=['GET'])
 def wifiSsids():
-    return
+    wifis=wifi_checker.instance.scan_wifi_list()
+    return json.dumps(wifis)
 
 
 @instance.route("/api/SetUpWifi/<ssid>/<pwd>", methods=['GET'])
 def SetUpWifi(ssid, pwd):
-    return
+    if wifi_checker.instance.connect_wifi(ssid,pwd):
+        return '连接成功'
+    return '连接失败'
 
 
 @instance.route("/api/RegisterCode", methods=['GET'])
@@ -87,15 +100,37 @@ def RegisterCode():
 @instance.route("/api/post_msg", methods=['POST'])
 def post_msg():
     util.log_info('web_api_server','recieve call for post message')
-    form = request.get_json()
-    util.log_info('web_api_server','recieve call for contentInfos with message ' + json.dumps(form,ensure_ascii=False))
-    if form is not None:
-        ty = form['type']
-        if ty == 'shutdown':
-            subprocess.call('sudo','halt')
-        if ty == 'reboot':
-            subprocess.call('sudo','reboot')
-    return None
+    ty=request.form['type']
+    if ty == 'shutdown':
+        subprocess.call('sudo','halt')
+
+    if ty == 'reboot':
+        subprocess.call('sudo','reboot')
+
+    if ty == 'setVolumn':
+        volumn=request.form['volumn']
+        subprocess.Popen(['amixer','set','Master',volumn],stdout=subprocess.PIPE)
+
+    if ty == 'setBootTimes':
+        model=request.form['model']
+        if model=='daily':
+            openTime=request.form['openTime']+':00'
+            closeTime=request.form['closeTime']+':00'
+            if not serial_port.instance.setDailyTIme(openTime,closeTime):
+                return 'fail'
+
+        if model=='manual':
+            return_val = serial_port.instance.setModeM()
+            time.sleep(10)
+            util.log_info("api return serial port", return_val)
+            if return_val == False:
+                return 'fail'
+            else:
+                return 'success'
+
+    if ty == 'currAppId':
+       config.current_app_id=request.form['appId']
+    return 'ok'
 
 
 def woker():

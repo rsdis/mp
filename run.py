@@ -13,6 +13,7 @@ import time
 import uuid
 import threading
 import json
+import time
 
 util.log_info("main",'service starting')
 # init machine code
@@ -62,7 +63,6 @@ if config.const_service_id is None:
             util.log_info("main",'check status if the machine code related device has been binded')
             time.sleep(1)
             temp_serviceid = downloader.instance.get_service_id_from_remote(machine_code)
-            #temp_serviceid='ct001'
         except Exception as err:
             util.log_error('main',err)
     util.log_info("main",'service id picked from server end, write it into local cache')
@@ -78,6 +78,7 @@ downloader.instance.start()
 util.log_info("main",'started apps,products,qrcode download and updating process.')
 
 #reload for default start
+time.sleep(5)
 default_app,start_path = downloader.instance.get_default_start()
 util.log_info("main",'get default apps')
 if default_app is not None:

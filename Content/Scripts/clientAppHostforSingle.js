@@ -10,9 +10,10 @@ ws.onmessage = function (event) {
 //MessageHub-发送消息
 //reboot-重启
 //shutdown-关机
-function SendMessage(json) {
+function SendMessage(json,callback) {
     $.post("http://127.0.0.1:8080/api/post_msg", json,function (result) {
-        console.log(data)
+        if(callback)
+          callback(result);
     });
 }
 
@@ -34,3 +35,15 @@ function OnMessage(json) {
 $("body").contextmenu(function () {
     return false;
 });
+
+
+function GetQueryString(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r !== null) return unescape(r[2]); return null;
+}
+
+
+function onBack(obj) {
+    window.location.href = $(obj).attr("backurl");
+}
