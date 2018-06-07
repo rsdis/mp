@@ -18,7 +18,7 @@ client_ver=''
 if [ -f $service_id_path ]
 then 
     echo 'service id existes'
-    service_id=`cat ~/dis/buildin/vers/service_id.ver`
+    service_id=`cat ~/fview/dis/buildin/vers/service_id.ver`
 else
     echo 'service id not existes'
     service_id='none'
@@ -28,7 +28,7 @@ fi
 if [ -f $client_ver_path ]
 then 
     echo 'client ver existes'
-    client_ver=`cat ~/dis/buildin/vers/client.ver`
+    client_ver=`cat ~/fview/dis/buildin/vers/client.ver`
 else
     echo 'client ver not existes'
     client_ver='empty client ver'
