@@ -1,5 +1,16 @@
 #!/bin/bash
 
+#check if python is running
+#set auto start
+running_text="ps -aux | grep run.py | grep -v grep"
+running=$(eval $running_text)
+echo $running
+
+if [ "$running" != "" ];then
+    echo "dis is running"
+    exit
+fi
+
 #set auto lock false
 gsettings set org.gnome.desktop.screensaver lock-enabled false
 gsettings set org.gnome.desktop.screensaver lock-delay 99999999
@@ -79,4 +90,4 @@ fi
 
 #start application
 cd ~/fview/dis/
-nohup python3.6 run.py &
+python3.6 run.py &

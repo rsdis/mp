@@ -7,3 +7,4 @@
 /__pycache__/*
 buildin/nginx.conf
 '/opt/chromium-browser'/*
+buildin/nginx.conf

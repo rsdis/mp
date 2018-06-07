@@ -31,9 +31,10 @@ class content_updater:
                 util.log_info('downloader','completed product update')
                 self.update_apps()
                 util.log_info('downloader','completed apps update')
-                time.sleep(10)
+                time.sleep(3600)
             except Exception as err:
                 util.log_error('downloader',err)
+                time.sleep(3600)
 
     def register_machine(self,session_key):
         url = '%s/%s/Device/Register'%(util.util_remote_service(config.const_api_name_resouce),config.const_api_name_resouce)
@@ -58,7 +59,9 @@ class content_updater:
             appId=config.current_app_id
         device_info_url = '%s/%s/Device/GetDetail?id=%s&source=client&appId=%s' % (util.util_remote_service(
             config.const_api_name_resouce), config.const_api_name_resouce, config.const_service_id,appId)
+        print(device_info_url)
         device_info = requests.get(device_info_url).json()
+        print(device_info)
         return device_info
 
     def set_boot_power(self):
@@ -126,9 +129,11 @@ class content_updater:
             return
         # Qrcode
         device_info = self.get_device_info()
+        print(device_info)
         # QR version
         device_info_version = int(re.findall(
             r'\b\d.*\d\b', device_info['wechat_qrcode_zip_url'])[0])
+        print(device_info_version)
         cached_ver = -1
         if util.get_cached_version('QR') is not None:
             cached_ver = int(util.get_cached_version('QR'))

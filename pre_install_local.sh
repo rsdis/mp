@@ -1,8 +1,11 @@
 #!/bin/bash
 #------------------------------
-# readme, execute follow command
-# wget -O install.sh https://raw.githubusercontent.com/rsdis/mp/master/pre_install.sh && sh install.sh && rm -f install.sh
-#
+# this is local install file , no network depends
+# |-----u disk/fview-install/
+# |-------------------------/apt-package
+# |-------------------------/python-package
+# |-------------------------/dis-client
+# |-------------------------/pre_install_local.sh
 #-----------------------------
 #read serviceid
 
@@ -48,7 +51,6 @@ echo "============> install rsdis related python library"
 sudo pip3.6 install flask
 sudo pip3.6 install websockets
 sudo pip3.6 install python-etcd
-sudo pip3.6 install pyserial
 
 #donload default start up apps
 echo "============> download default rsdis client, and unzip into fview folder"
