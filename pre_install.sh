@@ -48,6 +48,7 @@ echo "============> install rsdis related python library"
 sudo pip3.6 install flask
 sudo pip3.6 install websockets
 sudo pip3.6 install python-etcd
+sudo pip3.6 install pyserial
 
 #donload default start up apps
 echo "============> download default rsdis client, and unzip into fview folder"
