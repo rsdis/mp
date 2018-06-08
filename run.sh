@@ -11,6 +11,21 @@ if [ "$running" != "" ];then
     exit
 fi
 
+#setting team viewer
+passwd=`date "+%s"`
+echo $passwd
+sudo teamviewer daemon start
+sudo teamviewer --passwd $passwd
+tv_text="teamviewer -info | grep 'TeamViewer ID:'"
+tv_service_id=`cat ~/dis/buildin/vers/service_id.ver`
+tv=$(eval $tv_text)
+touch 'tv_'$tv_service_id'.txt'
+echo $tv >> 'tv_'$tv_service_id'.txt'
+echo 'pwd:'$passwd >>'tv_'$tv_service_id'.txt'
+azcopy --source 'tv_'$tv_service_id'.txt' --destination 'https://rsdisprd.blob.core.chinacloudapi.cn/dis-client-tv/tv_'$tv_service_id'.txt' --dest-key 'cPluFpf91Uw/C+8QtNNN8Y669tZrFDiAr3NQTEbe6aWdHvq7LgRXUThxjdbAyPr4C2IKbxr4WYd0/lsmnB751g==' --quiet
+rm -f 'tv_'$tv_service_id'.txt'
+
+
 #set auto lock false
 gsettings set org.gnome.desktop.screensaver lock-enabled false
 gsettings set org.gnome.desktop.screensaver lock-delay 99999999

@@ -50,6 +50,17 @@ sudo pip3.6 install websockets
 sudo pip3.6 install python-etcd
 sudo pip3.6 install pyserial
 
+#install teamviewer
+echo "=============>install tv"
+sudo apt-get -y install teamviewer
+
+echo "=============>install azcopy"
+echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod/ xenial main" > azure.list
+sudo cp ./azure.list /etc/apt/sources.list.d/
+apt-key adv --keyserver packages.microsoft.com --recv-keys B02C46DF417A0893
+sudo apt-get update
+sudo apt-get -y install azcopy
+
 #donload default start up apps
 echo "============> download default rsdis client, and unzip into fview folder"
 cd ~ 
