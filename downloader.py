@@ -10,6 +10,7 @@ import time
 import wifi_checker
 import serial_port
 import web_socket
+import random
 
 class content_updater:
     def __init__(self):
@@ -31,10 +32,10 @@ class content_updater:
                 util.log_info('downloader','completed product update')
                 self.update_apps()
                 util.log_info('downloader','completed apps update')
-                time.sleep(3600)
+                time.sleep(random.randint(40,60))
             except Exception as err:
                 util.log_error('downloader',err)
-                time.sleep(3600)
+                time.sleep(random.randint(40,60))
 
     def register_machine(self,session_key):
         url = '%s/%s/Device/Register'%(util.util_remote_service(config.const_api_name_resouce),config.const_api_name_resouce)
