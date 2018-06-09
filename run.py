@@ -14,8 +14,8 @@ import uuid
 import threading
 import json
 import time
+import log_uploader
 
-util.log_info("main",'service starting')
 # init machine code
 machine_code = util.get_cached_version('mc')
 util.log_info("main",'get machine code')
@@ -23,6 +23,8 @@ if machine_code is None:
     util.log_info("main",'machine code is empty, create it.')
     util.set_cached_version('mc',str(uuid.uuid1()).replace('-',''))
 machine_code = util.get_cached_version('mc')
+
+    
 
 # start nginx service
 nginx.nginx_config_init()
@@ -71,6 +73,10 @@ if config.const_service_id is None:
     config.const_service_id = temp_serviceid
     util.set_cached_version(config.const_service_id_name,temp_serviceid)
 
+
+#start log upload
+log_uploader.instance.start()
+
 #start default page
 util.log_info("main",'start chrom process with default page')
 chrome.instance.start('%s/Content/default.html'%(config.const_client_web_server_root))
@@ -89,7 +95,7 @@ if default_app is not None:
         'MessageData':start_path
     }
     web_socket.instance.send(json.dumps(msg))
-    
+
 quite = ''
 while quite != 'q':
     quite = input()
